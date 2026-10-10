@@ -1,6 +1,6 @@
 const express = require('express')
-const { googleAuth } = require('../controllers/user.controller.js');
-const { logout } = require('../controllers/user.controller.js')
+const { googleAuth } = require('../controllers/auth.controller.js');
+const { logout } = require('../controllers/auth.controller.js')
 
 const authRouter = express.Router();
 
