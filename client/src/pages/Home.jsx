@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { motion } from 'motion/react'
 import LoginModal from '../components/LoginModal'
+
 
 const highlights = [
     "AI Generated code",
@@ -8,9 +9,9 @@ const highlights = [
     "Production Ready Output"
 ]
 
-const [openLogin, setOpenLogin] = useState(false)
-
 function Home() {
+    const [openLogin, setOpenLogin] = useState(false)
+
     return (
         <div className='relative min-h-screen bg-[#040404] text-white overflow-hidden'>
             <motion.div
@@ -27,7 +28,9 @@ function Home() {
                         <div className='hidden md:inline text-sm text-zinc-400 hover:text-white transition-colors cursor-pointer'>
                             Pricing
                         </div>
-                        <button className='px-5 py-2 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-medium text-sm transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/35 hover:scale-[1.02] active:scale-[0.98] cursor-pointer'>
+                        <button
+                            onClick={() => setOpenLogin(true)}
+                            className='px-5 py-2 rounded-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-medium text-sm transition-all duration-300 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/35 hover:scale-[1.02] active:scale-[0.98] cursor-pointer'>
                             Get Started
                         </button>
                     </div>
@@ -52,15 +55,15 @@ function Home() {
                     Describe your idea and let AI generate a modern,
                     responsive , production-ready website.
                 </motion.p >
-                <motion.dev>
+                <motion.div>
                     <button className='mt-12 px-10 py-4 rounded-xl bg-white text-black font-semibold hover:scale-105' onClick={() => setOpenLogin(true)}>
                         Get Started
                     </button>
-                </motion.dev>
+                </motion.div>
             </section>
 
             <section className='max-w-7xl mx-auto px-6 pb-32'>
-                <div className='grid grid-clos-1 md:grid-cols-3 gap-10'>
+                <div className='grid grid-cols-1 md:grid-cols-3 gap-10'>
                     {highlights.map((h, i) => (
                         <motion.div
                             key={i}
