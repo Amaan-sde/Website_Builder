@@ -75,6 +75,10 @@ const apiLimiter = rateLimit({
     legacyHeaders: false
 });
 
+app.get('/', (req, res) => {
+    res.send('Hello World');
+});
+
 app.get('/site/:id', deployCtrl.servePublicSite);
 app.get('/site/:id/:assetPath', deployCtrl.servePublicSite);
 
