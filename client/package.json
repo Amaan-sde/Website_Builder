@@ -7,15 +7,20 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "vite preview --host 0.0.0.0 --port 5173"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/vite": "^4.3.3",
     "axios": "^1.20.0",
     "firebase": "^13.0.0",
+    "jszip": "^3.10.2",
+    "lucide-react": "^1.61.0",
     "motion": "^13.1.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "react-hot-toast": "^2.6.1",
     "react-router-dom": "^7.18.2",
     "tailwindcss": "^4.3.3"
   },
