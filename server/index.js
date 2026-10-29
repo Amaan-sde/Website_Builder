@@ -21,7 +21,18 @@ const PORT = process.env.PORT || 3000;
 
 connectDb();
 
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173,http://127.0.0.1:5173,http://localhost:5174,http://127.0.0.1:5174').split(',').map(s => s.trim());
+const defaultAllowed = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'http://localhost:80',
+    'http://127.0.0.1:80',
+    'http://localhost',
+    'http://3.110.221.10:5173',
+    'http://3.110.221.10:80',
+    'http://3.110.221.10'
+];
+const envAllowed = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map(s => s.trim()) : [];
+const allowedOrigins = [...new Set([...defaultAllowed, ...envAllowed])];
 
 app.use(helmet({
     contentSecurityPolicy: false,
@@ -31,8 +42,10 @@ app.use(helmet({
 
 const isAllowedOrigin = (origin) => {
     if (!origin) return true;
-    if (allowedOrigins.includes(origin)) return true;
-    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return true;
+    const cleanOrigin = origin.replace(/\/+$/, '');
+    if (allowedOrigins.includes(cleanOrigin) || allowedOrigins.includes(origin)) return true;
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(cleanOrigin)) return true;
+    if (/^https?:\/\/3\.110\.221\.10(:\d+)?$/.test(cleanOrigin)) return true;
     return false;
 };
 

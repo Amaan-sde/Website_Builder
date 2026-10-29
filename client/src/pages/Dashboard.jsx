@@ -276,7 +276,7 @@ export default function Dashboard() {
                                                 <button
                                                     onClick={(e) => {
                                                         e.stopPropagation();
-                                                        const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000';
+                                                        const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://3.110.167.167:3000';
                                                         window.open(`${serverUrl}/site/${project._id}`, '_blank');
                                                     }}
                                                     className="text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1"
@@ -322,10 +322,14 @@ class EventSourceWithPost {
 
     async _connect(url, body) {
         try {
-            const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000';
+            const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://3.110.167.167:3000';
+            const token = localStorage.getItem('token');
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
             const res = await fetch(`${serverUrl}/api/generate/website`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers,
                 credentials: 'include',
                 body: JSON.stringify(body)
             });

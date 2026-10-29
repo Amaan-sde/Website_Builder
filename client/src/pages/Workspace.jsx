@@ -387,7 +387,7 @@ export default function Workspace() {
     const autoSaveTimer = useRef(null);
     const generationTriggered = useRef(false);
 
-    const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000';
+    const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://3.110.167.167:3000';
 
     const bundledHtml = useMemo(() => {
         return bundlePreviewHtml(fileContents, project?.framework);

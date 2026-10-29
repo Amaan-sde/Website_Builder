@@ -29,7 +29,7 @@ services:
       - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3.5-flash}
       - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID:-websitebuilder-ee244}
       - FIREBASE_WEB_API_KEY=${FIREBASE_WEB_API_KEY:-AIzaSyD0qjMAogy9-sEN12yvikBUgADT-pFwqhE}
-      - ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000
+      - ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000,http://3.110.221.10:5173,http://3.110.221.10
     command: sh -c "npm install && npm run dev"
     networks:
       - dev-network
@@ -47,7 +47,7 @@ services:
     ports:
       - "5173:5173"
     environment:
-      - VITE_SERVER_URL=http://localhost:3000
+      - VITE_SERVER_URL=http://3.110.167.167:3000
       - VITE_FIREBASE_API_KEY=${VITE_FIREBASE_API_KEY:-AIzaSyD0qjMAogy9-sEN12yvikBUgADT-pFwqhE}
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
     depends_on:

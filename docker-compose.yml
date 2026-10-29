@@ -19,7 +19,7 @@ services:
       - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3.5-flash}
       - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID:-websitebuilder-ee244}
       - FIREBASE_WEB_API_KEY=${FIREBASE_WEB_API_KEY:-AIzaSyD0qjMAogy9-sEN12yvikBUgADT-pFwqhE}
-      - ALLOWED_ORIGINS=http://localhost:5173,http://localhost:80,http://localhost
+      - ALLOWED_ORIGINS=http://localhost:5173,http://localhost:80,http://localhost,http://3.110.221.10:5173,http://3.110.221.10:80,http://3.110.221.10
 
   # ----------------------------------------------------------------------------
   # Frontend Service (React + Vite Preview)
@@ -30,5 +30,7 @@ services:
     restart: unless-stopped
     ports:
       - "5173:5173"   # Open in browser at http://localhost:5173
+    environment:
+      - VITE_SERVER_URL=${VITE_SERVER_URL:-http://3.110.167.167:3000}
     depends_on:
       - backend
