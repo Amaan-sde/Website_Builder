@@ -8,7 +8,9 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        lowercase: true,
+        trim: true
     },
     password: {
         type: String
@@ -17,15 +19,28 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
+    firebaseUid: {
+        type: String,
+        sparse: true,
+        index: true
+    },
     plan: {
         type: String,
-        enum: ["free", "pro", "enterprise"],
-        default: "free"
+        enum: ['free', 'pro', 'enterprise'],
+        default: 'free'
     },
     credits: {
         type: Number,
         default: 100,
         min: 0
+    },
+    monthlyGenerations: {
+        type: Number,
+        default: 0
+    },
+    generationResetAt: {
+        type: Date,
+        default: () => new Date()
     }
 }, { timestamps: true });
 
