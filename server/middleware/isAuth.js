@@ -1,24 +1,24 @@
-import jwt from "jsonwebtoken"
-
+const jwt = require('jsonwebtoken');
+const User = require('../models/user.model.js');
 
 const isAuth = async (req, res, next) => {
     try {
-        const token = req.cookies.token;
+        const authHeader = req.headers.authorization;
+        const bearerToken = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+        const token = req.cookies?.token || bearerToken;
         if (!token) {
-            return res.status(400).json({
-                message: "Token Not Found!"
-            })
+            return res.status(401).json({ message: 'Authentication required' });
         }
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = await User.findById(decoded.id);
+        const user = await User.findById(decoded.id).select('-password');
+        if (!user) {
+            return res.status(401).json({ message: 'User not found' });
+        }
+        req.user = user;
         next();
+    } catch (err) {
+        return res.status(401).json({ message: 'Invalid or expired token' });
     }
-    catch (err) {
-        return res.status(500).json({
-            message: "Invalid Token"
-        })
-    }
-}
+};
 
-
-export default isAuth
+module.exports = isAuth;
