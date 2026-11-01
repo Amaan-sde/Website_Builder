@@ -130,11 +130,14 @@ table.data-table th, table.data-table td {
 table.data-table th { background-color: #f1f5f9; font-weight: bold; }
 .table-caption { font-size: 10pt; font-weight: bold; text-align: center; margin-bottom: 0.08cm; margin-top: 0.08cm; }
 .figure-caption { font-size: 9.5pt; font-weight: bold; text-align: center; margin-top: 0.08cm; margin-bottom: 0.15cm; }
-ol.references-list { margin-top: 0.1cm; padding-left: 0.6cm; font-size: 10pt; line-height: 1.35; }
-ol.references-list li { margin-bottom: 0.18cm; text-align: justify; }
+ol.references-list { margin-top: 0.1cm; padding-left: 0.6cm; font-size: 9.8pt; line-height: 1.33; }
+ol.references-list li { margin-bottom: 0.14cm; text-align: justify; }
+.ref-role { font-style: italic; color: #1e3a8a; display: block; margin-top: 1px; }
 </style>
 </head>
 <body>
+
+<!-- PAGE 1: TITLE PAGE -->
 <div class="page">
 <div style="text-align: center;">
   <div class="title">GENWEB.AI: AN AUTONOMOUS FULL-STACK WEB APPLICATION SYNTHESIS PLATFORM WITH HYBRID VISUAL-CODE ORCHESTRATION AND PRODUCTION DEVOPS PIPELINES</div>
@@ -178,6 +181,8 @@ ol.references-list li { margin-bottom: 0.18cm; text-align: justify; }
   </table>
 </div>
 </div>
+
+<!-- PAGE 2: CERTIFICATE OF APPROVAL & TABLE OF CONTENTS -->
 <div class="page">
 <h1 class="sec-heading" style="text-align: center; border-bottom: none;">CERTIFICATE OF APPROVAL</h1>
 <p style="text-indent: 0; margin-bottom: 0.18cm; font-size: 10pt; line-height: 1.32;">
@@ -205,45 +210,52 @@ ol.references-list li { margin-bottom: 0.18cm; text-align: justify; }
   <div class="toc-row"><span><strong>Certificate of Approval & Table of Contents</strong></span><span class="toc-dots"></span><span>2</span></div>
   <div class="toc-row"><span><strong>Abstract</strong></span><span class="toc-dots"></span><span>3</span></div>
   <div class="toc-row"><span><strong>1. Introduction</strong></span><span class="toc-dots"></span><span>3</span></div>
-  <div class="toc-row"><span style="padding-left: 0.4cm;">1.1 Background and Problem Domain</span><span class="toc-dots"></span><span>3</span></div>
-  <div class="toc-row"><span style="padding-left: 0.4cm;">1.2 System Architecture Overview (Figure 1)</span><span class="toc-dots"></span><span>4</span></div>
+  <div class="toc-row"><span style="padding-left: 0.4cm;">1.1 Architectural Paradigm and Core Innovations of GenWeb.ai (Figure 1)</span><span class="toc-dots"></span><span>4</span></div>
   <div class="toc-row"><span><strong>2. Literature Survey</strong></span><span class="toc-dots"></span><span>5</span></div>
-  <div class="toc-row"><span style="padding-left: 0.4cm;">2.1 LLMs in Code Synthesis & AST Manipulation</span><span class="toc-dots"></span><span>5</span></div>
-  <div class="toc-row"><span style="padding-left: 0.4cm;">2.2 WebContainer & In-Browser Virtualisation Limits</span><span class="toc-dots"></span><span>5</span></div>
-  <div class="toc-row"><span style="padding-left: 0.4cm;">2.3 Comparative Evaluation of Existing Platforms (Table 1)</span><span class="toc-dots"></span><span>6</span></div>
+  <div class="toc-row"><span style="padding-left: 0.4cm;">2.1 Large Language Models in Automated Web Generation</span><span class="toc-dots"></span><span>5</span></div>
+  <div class="toc-row"><span style="padding-left: 0.4cm;">2.2 In-Browser Execution vs. Server Containerisation</span><span class="toc-dots"></span><span>5</span></div>
+  <div class="toc-row"><span style="padding-left: 0.4cm;">2.3 Review of Contemporary AI Web Builders</span><span class="toc-dots"></span><span>5</span></div>
+  <div class="toc-row"><span style="padding-left: 0.4cm;">2.4 Comparative Evaluation (Table 1) & Engineering Gaps</span><span class="toc-dots"></span><span>6</span></div>
   <div class="toc-row"><span><strong>3. Problem Formulation</strong></span><span class="toc-dots"></span><span>7</span></div>
   <div class="toc-row"><span><strong>4. Objectives</strong></span><span class="toc-dots"></span><span>7</span></div>
   <div class="toc-row"><span><strong>5. Methodology / Planning of Work</strong></span><span class="toc-dots"></span><span>8</span></div>
-  <div class="toc-row"><span style="padding-left: 0.4cm;">5.1 Hybrid Visual-Code Architecture & Git Sync</span><span class="toc-dots"></span><span>8</span></div>
-  <div class="toc-row"><span style="padding-left: 0.4cm;">5.2 DevOps: Docker, Nginx & Telemetry (Figure 2)</span><span class="toc-dots"></span><span>9</span></div>
+  <div class="toc-row"><span style="padding-left: 0.4cm;">5.1 System Architecture and Modular Design</span><span class="toc-dots"></span><span>8</span></div>
+  <div class="toc-row"><span style="padding-left: 0.4cm;">5.2 Development Environment & Experimental Testbed</span><span class="toc-dots"></span><span>8</span></div>
+  <div class="toc-row"><span style="padding-left: 0.4cm;">5.3 Sampling and Benchmark Prompts</span><span class="toc-dots"></span><span>8</span></div>
+  <div class="toc-row"><span style="padding-left: 0.4cm;">5.4 Quantitative Variables and Performance Controls</span><span class="toc-dots"></span><span>8</span></div>
+  <div class="toc-row"><span style="padding-left: 0.4cm;">5.5 DevOps Infrastructure: Containerisation, Load Balancing & Observability (Figure 2)</span><span class="toc-dots"></span><span>9</span></div>
   <div class="toc-row"><span><strong>6. Activity Chart (Semester Work Plan - Table 2)</strong></span><span class="toc-dots"></span><span>9</span></div>
   <div class="toc-row"><span><strong>References</strong></span><span class="toc-dots"></span><span>10</span></div>
 </div>
 </div>
+
+<!-- PAGE 3: ABSTRACT & 1. INTRODUCTION -->
 <div class="page">
 <h1 class="sec-heading">ABSTRACT</h1>
 <div class="abstract-box">
-  <p><strong>Motivation / Problem Statement:</strong> Recent advancements in generative artificial intelligence have catalyzed autonomous web development. However, commercial platforms such as Bolt.new and Lovable.dev suffer from fundamental architectural bottlenecks: fragile in-browser WebContainer runtimes that deplete memory, restrictive paywalls with rigid token caps, and the "prompt-regression trap"—where minor visual alterations require natural language prompts that destructively overwrite existing codebases.</p>
-  <p><strong>Methods / Approach:</strong> This project presents <em>GenWeb.ai</em>, an autonomous, production-grade full-stack web application synthesis platform. GenWeb.ai unites Large Language Models (Gemini Flash/Pro) with a dual-mode orchestration system: a real-time streaming Monaco code editor and an in-place visual DOM inspector that enables deterministic manual alterations without prompt hallucinations. The platform incorporates native bidirectional GitHub version control, offline ZIP source compilation, and an enterprise DevOps infrastructure powered by multi-stage Docker containers, Nginx reverse proxy load balancing, and Prometheus-Grafana telemetry.</p>
-  <p><strong>Results / Findings:</strong> The developed system guarantees sub-second hot preview rendering, zero token expenditure for visual fine-tuning, resilient fallback domain generators achieving 100% synthesis uptime, and containerised deployment readiness with high-concurrency layer-7 request distribution.</p>
-  <p><strong>Conclusion / Implications:</strong> GenWeb.ai bridges the critical gap between conversational AI prototyping and industrial-grade software engineering, offering an accessible, vendor-neutral, and transparent solution for academic researchers, developers, and institutions.</p>
-  <p class="keywords">Keywords: Autonomous Web Synthesis, Large Language Models, Abstract Syntax Tree, Visual DOM Inspector, DevOps Containerisation, Nginx Load Balancing, Observability.</p>
+  <p><strong>Motivation / Problem Statement:</strong> Recent breakthroughs in generative artificial intelligence have transformed software engineering. However, popular commercial platforms like Bolt.new and Lovable suffer from major practical bottlenecks: heavy in-browser runtimes that consume high system memory and freeze browser tabs, expensive subscription paywalls, and accidental code overwriting—where asking the AI for small visual tweaks often rewrites and breaks working code.</p>
+  <p><strong>Methods / Approach:</strong> This project presents <em>GenWeb.ai</em>, an autonomous, production-ready full-stack web application builder. GenWeb.ai pairs modern Large Language Models (Google Gemini) with a hybrid dual-mode workspace: a real-time streaming Monaco code editor and an in-place visual DOM inspector that lets users click and style elements directly without making repeated AI prompts. The platform incorporates bidirectional GitHub synchronization, one-click offline ZIP export, and a production DevOps infrastructure powered by multi-stage Docker containers, Nginx reverse proxy load balancing, and Prometheus-Grafana system monitoring.</p>
+  <p><strong>Results / Findings:</strong> The developed platform delivers instant live preview rendering, zero token cost for visual styling adjustments, offline fallback templates ensuring 100% generation uptime, and automated multi-container deployment capable of handling concurrent requests smoothly.</p>
+  <p><strong>Conclusion / Implications:</strong> GenWeb.ai connects fast AI generation with reliable full-stack engineering, providing an accessible, vendor-neutral, and transparent web development platform for students, developers, and institutions.</p>
+  <p class="keywords">Keywords: Autonomous Web Synthesis, Large Language Models, Visual DOM Inspector, Monaco Code Editor, Docker Containers, Nginx Load Balancing, Observability.</p>
 </div>
 
 <h1 class="sec-heading">1. INTRODUCTION</h1>
-<p>Modern software development is undergoing a fundamental transformation through the advent of artificial intelligence and deep learning [1]. Traditionally, designing and deploying a modern web application demanded extensive cross-functional knowledge encompassing frontend frameworks (React, Vue, Tailwind CSS), backend RESTful application programming interfaces (APIs), relational and non-relational database architectures, version control, and cloud infrastructure operations [2]. While low-code and no-code platforms (such as Webflow and Wix) streamlined interface design, they historically restricted developers through proprietary runtimes, unoptimized code generation, and rigid vendor lock-in [3].</p>
-<p>The recent emergence of generative AI-powered development environments, prominently represented by platforms such as Bolt.new, Lovable.dev, and Vercel v0, aims to automate end-to-end full-stack software synthesis from conversational natural language prompts [4]. By querying high-parameter Large Language Models (LLMs) such as GPT-4o, Claude 3.5 Sonnet, and Google Gemini, these systems dynamically generate component source trees, configure project dependencies, and render interactive live previews [5].</p>
-<p>Nevertheless, practical adoption reveals severe systemic deficiencies in current commercial offerings. Primarily, existing platforms treat code alteration as a purely conversational process. When an engineer seeks to execute a micro-adjustment—such as shifting a button position by 10 pixels, altering a typography style, or adjusting an element layout—the user must formulate an ambiguous natural language instruction. The remote LLM frequently regenerates entire source files, triggering accidental syntactical regressions, losing previously configured business logic, and consuming substantial token balances [6]. GenWeb.ai directly overcomes this limitation through hybrid visual-code orchestration.</p>
+<p>Modern software development is evolving rapidly through the power of artificial intelligence. Traditionally, designing and deploying a modern web application required developers to manually master frontend component frameworks like React [1], utility-first styling with Tailwind CSS [9], backend REST API architectures using Node.js and Express [11], databases like MongoDB [12], and cloud deployment operations [8]. While low-code website builders like Webflow and Wix made layout design simpler, they produced rigid code templates and locked projects inside proprietary hosting platforms [3].</p>
+<p>Recently, generative AI web development environments—such as Bolt.new, Lovable, and Vercel v0—have attempted to generate full-stack web applications from simple natural language prompts. By querying Large Language Models (LLMs) like Google Gemini [2], these tools dynamically generate source code files, configure project dependencies, and render live interactive web previews.</p>
+<p>However, practical usage reveals severe limitations in existing commercial offerings. Primarily, existing platforms treat every code modification as a prompt-based conversational task. When a developer wants to make a small visual adjustment—such as moving a button, changing margins, or updating colors—they must write another prompt. The remote AI then regenerates large sections of code, which often introduces new syntax errors, breaks working state logic, and wastes valuable AI tokens [2, 10]. GenWeb.ai directly solves this limitation by introducing a hybrid visual-code workflow with full DevOps support.</p>
 </div>
+
+<!-- PAGE 4: 1.1 ARCHITECTURAL PARADIGM & FIGURE 1 -->
 <div class="page">
 <h2 class="sub-heading">1.1 Architectural Paradigm and Core Innovations of GenWeb.ai</h2>
-<p style="text-indent: 0;">To resolve the dichotomy between automated generation and developer sovereignty, GenWeb.ai establishes a five-tier architecture:</p>
+<p style="text-indent: 0;">To bridge the gap between fast AI code generation and complete manual developer control, GenWeb.ai is built on a five-tier modular architecture:</p>
 <ul class="bullet-list">
-  <li><strong>Client Presentation & Hybrid Workspace:</strong> Engineered in React 19 and Tailwind CSS, featuring a Monaco IDE, sandboxed iframe runtime, and a DOM inspector for visual CSS tweaks.</li>
-  <li><strong>Backend Orchestration & Streaming Gateway:</strong> Node.js/Express service utilizing Server-Sent Events (SSE) for incremental token streaming, secured via JWT and rate limiting.</li>
-  <li><strong>Multi-Engine Synthesis Pipeline:</strong> Couples Google Gemini APIs with deterministic fallback engines guaranteeing 100% synthesis availability during API downtime.</li>
-  <li><strong>Bidirectional Git & Artifact Management:</strong> Full GitHub REST/GraphQL API integration enabling repo cloning, branching, committing, pushing, and offline ZIP export.</li>
-  <li><strong>Enterprise DevOps & Observability Stack:</strong> Multi-stage Docker Alpine containers, Nginx layer-7 load balancing, and Prometheus/Grafana real-time metrics.</li>
+  <li><strong>Client Presentation & Hybrid Workspace:</strong> Built using React 19 [1] and Tailwind CSS [9], featuring a Monaco code editor, an isolated preview iframe [10], and an in-place visual DOM inspector for direct UI styling.</li>
+  <li><strong>Backend API & Streaming Gateway:</strong> An Express.js [11] service that streams AI-generated code directly to the browser using Server-Sent Events (SSE), secured with JWT authentication and rate limiting.</li>
+  <li><strong>Multi-Engine Synthesis Pipeline:</strong> Combines Google Gemini API [2] with smart offline fallback templates to ensure 100% website generation uptime even during API outages.</li>
+  <li><strong>Bidirectional GitHub & ZIP Export:</strong> Uses GitHub REST APIs [7] for importing repositories, creating branches, committing changes, and pushing code directly to GitHub, alongside one-click ZIP download.</li>
+  <li><strong>Enterprise DevOps & Observability:</strong> Uses multi-stage Alpine Docker containers [8], an Nginx layer-7 reverse proxy for load balancing [4], and Prometheus with Grafana for live telemetry and monitoring [5, 6].</li>
 </ul>
 
 <div style="text-align: center; margin: 0.15cm 0;">
@@ -286,8 +298,8 @@ ol.references-list li { margin-bottom: 0.18cm; text-align: justify; }
     <text x="360" y="143" font-family="Times New Roman" font-size="10.5" font-weight="bold" text-anchor="middle">SSE Token Streamer</text>
     <text x="360" y="159" font-family="Times New Roman" font-size="9.5" text-anchor="middle" fill="#475569">Sub-Second Output Latency</text>
     <rect x="285" y="185" width="150" height="60" rx="3" fill="#ffffff" stroke="#94a3b8" />
-    <text x="360" y="208" font-family="Times New Roman" font-size="10.5" font-weight="bold" text-anchor="middle">AST Synchroniser</text>
-    <text x="360" y="224" font-family="Times New Roman" font-size="9.5" text-anchor="middle" fill="#475569">DOM-to-Source Bridge</text>
+    <text x="360" y="208" font-family="Times New Roman" font-size="10.5" font-weight="bold" text-anchor="middle">DOM State Bridge</text>
+    <text x="360" y="224" font-family="Times New Roman" font-size="9.5" text-anchor="middle" fill="#475569">Direct Style Synchroniser</text>
     <text x="360" y="238" font-family="Times New Roman" font-size="8.5" text-anchor="middle" fill="#2563eb">Zero Token Re-Render</text>
     <rect x="285" y="255" width="150" height="65" rx="3" fill="#ffffff" stroke="#94a3b8" />
     <text x="360" y="278" font-family="Times New Roman" font-size="10.5" font-weight="bold" text-anchor="middle">MongoDB Database</text>
@@ -306,7 +318,7 @@ ol.references-list li { margin-bottom: 0.18cm; text-align: justify; }
     <text x="592" y="106" font-family="Times New Roman" font-size="8.5" text-anchor="middle" fill="#16a34a">Deterministic Fallback</text>
     <rect x="515" y="125" width="155" height="55" rx="3" fill="#ffffff" stroke="#94a3b8" />
     <text x="592" y="148" font-family="Times New Roman" font-size="10.5" font-weight="bold" text-anchor="middle">GitHub Version Control</text>
-    <text x="592" y="164" font-family="Times New Roman" font-size="9" text-anchor="middle" fill="#475569">Bidirectional Sync & Push</text>
+    <text x="592" y="164" font-family="Times New Roman" font-size="9.5" text-anchor="middle" fill="#475569">Bidirectional Sync & Push</text>
     <rect x="515" y="190" width="155" height="65" rx="3" fill="#ffffff" stroke="#94a3b8" />
     <text x="592" y="213" font-family="Times New Roman" font-size="10.5" font-weight="bold" text-anchor="middle">Docker Multi-Stage</text>
     <text x="592" y="228" font-family="Times New Roman" font-size="9" text-anchor="middle" fill="#475569">Client & Server Containers</text>
@@ -318,24 +330,28 @@ ol.references-list li { margin-bottom: 0.18cm; text-align: justify; }
   <div class="figure-caption">Figure 1: High-Level System Architecture and Orchestration Pipeline of GenWeb.ai</div>
 </div>
 </div>
+
+<!-- PAGE 5: 2. LITERATURE SURVEY -->
 <div class="page">
 <h1 class="sec-heading">2. LITERATURE SURVEY</h1>
-<p>The literature survey investigates the computational principles, historical evolution, and engineering bottlenecks associated with automated code generation, web virtualisation, and generative AI workspaces.</p>
+<p>The literature survey reviews the core concepts, modern tools, and practical challenges associated with AI code generation, browser-based execution, and automated web development platforms.</p>
 
-<h2 class="sub-heading">2.1 Large Language Models in Automated Code Synthesis</h2>
-<p>The deployment of Transformer-based architectures [1] revolutionized computational linguistics and automated code synthesis. Foundational models including OpenAI Codex [2], StarCoder [7], Claude 3.5, and Gemini 1.5/2.0 [8] established high competence in translating natural language specifications into multi-file source trees across modern frameworks. However, empirical investigations by Vaithilingam et al. [9] and Chen et al. [2] revealed that conversational code assistants frequently generate code suffering from hallucinated endpoints, deprecated packages, and subtle runtime defects. In complex full-stack web applications involving interconnected modules (state stores, APIs, and schemas), isolated token prediction without global AST context frequently triggers cascading compilation failures [10].</p>
+<h2 class="sub-heading">2.1 Large Language Models in Automated Web Generation</h2>
+<p>Modern Large Language Models such as Google Gemini [2] have transformed software development by generating multi-file applications directly from natural language prompts. By training on vast code repositories, these models can synthesize frontend React components [1], backend routes [11], and database schemas [12]. However, conversational AI coding tools frequently introduce subtle defects, deprecated packages, or broken imports. In complex full-stack web applications involving interconnected modules and global states, repeatedly re-generating code via prompts without visual feedback frequently triggers compilation errors and unexpected regressions.</p>
 
-<h2 class="sub-heading">2.2 In-Browser Virtualisation Runtimes and Memory Ceilings</h2>
-<p>To execute synthesized Node.js applications within the browser without external servers, modern platforms employ WebAssembly (Wasm) virtualisation. Most prominently, StackBlitz engineered <em>WebContainers</em> [11], executing an operating system emulator inside browser threads via SharedArrayBuffer primitives. While responsive for lightweight demos, benchmark analyses demonstrate severe practical constraints: WebContainers are bound by browser memory limits (typically 2GB–4GB per tab) and strictly prohibit native C/C++ compiled binaries. High-load package installations frequently trigger tab crashes and silent thread lockups [11]. In contrast, server-side Linux containers utilizing Docker namespaces guarantee complete dependency compatibility and horizontal scalability [12].</p>
+<h2 class="sub-heading">2.2 In-Browser Execution vs. Server Containerisation</h2>
+<p>To run full-stack Node.js applications directly inside the web browser without external servers, commercial tools like Bolt.new use WebAssembly (Wasm) runtimes called WebContainers. While convenient for quick demonstrations, WebContainers consume significant browser memory (often exceeding 2 GB to 4 GB per tab), causing browser slowdowns and crashes on standard laptops. Furthermore, they cannot execute native Linux binaries. In contrast, running lightweight Linux containers using Docker [8] ensures consistent dependency execution, lower client resource usage, and scalable cloud deployment.</p>
 
-<h2 class="sub-heading">2.3 Critical Review of Contemporary AI Web Builders</h2>
+<h2 class="sub-heading">2.3 Review of Contemporary AI Web Builders</h2>
 <p>A systematic technical evaluation of leading commercial platforms identifies distinct architectural models and operational constraints:</p>
 <ul class="bullet-list">
-  <li><strong>Bolt.new (StackBlitz):</strong> Executes full-stack Node.js environments inside client browsers using WebContainers. However, it exhibits severe compilation stalls on low-specification devices, enforces steep subscription charges upon token depletion, and restricts external containerised deployment [11].</li>
-  <li><strong>Lovable.dev:</strong> Focuses on React/Vite web application synthesis with a polished conversational chat interface. However, users remain trapped within a closed proprietary ecosystem. Direct in-place DOM editing is absent; altering a single component requires natural language re-prompting that frequently introduces regressive breaking changes into previously working sections [4].</li>
-  <li><strong>Vercel v0:</strong> Excels at isolated user interface component generation using Tailwind CSS. However, it lacks native full-stack API generation, complex backend persistence orchestration, and native bi-directional Git synchronisation for existing external repositories [5].</li>
+  <li><strong>Bolt.new (StackBlitz):</strong> Executes full-stack Node.js environments inside client browsers using WebContainers. However, it suffers from severe browser slowdowns on standard laptops, enforces strict subscription paywalls when tokens run out, and lacks tools for external containerised deployment [8].</li>
+  <li><strong>Lovable.dev:</strong> Generates clean React/Vite web applications [1, 3] through conversational prompts. However, it lacks a visual editor for manual tweaks. Changing a simple element layout requires writing an AI prompt, which frequently rewrites other parts of the code and introduces bugs.</li>
+  <li><strong>Vercel v0:</strong> Specializes in creating isolated UI components with Tailwind CSS [9]. However, it lacks full-stack backend persistence [12] and two-way GitHub repository synchronization [7].</li>
 </ul>
 </div>
+
+<!-- PAGE 6: TABLE 1 & 2.4 GAPS -->
 <div class="page">
 <div class="table-caption">Table 1: Comparative Evaluation of Leading AI Web Synthesis Platforms vs GenWeb.ai</div>
 <table class="data-table">
@@ -416,66 +432,72 @@ ol.references-list li { margin-bottom: 0.18cm; text-align: justify; }
 </table>
 
 <h2 class="sub-heading">2.4 Identification of Critical Gaps in Existing Literature</h2>
-<p>The synthesis of contemporary literature and platform evaluations exposes key engineering gaps:</p>
-<p><strong>Gap 1: The Prompt-Regression Dilemma.</strong> While LLMs excel at initial scaffolding, natural language is inherently imprecise for micro-adjustments [6]. When an operator prompts an LLM to alter padding or reposition a button, the model recalculates the entire file AST, often overwriting complex state hooks or introducing unhandled runtime exceptions. Existing tools lack a client-side visual bridge that directly synchronizes DOM modifications back to source code without token expenditure.</p>
-<p><strong>Gap 2: Isolation from Standard DevOps Lifecycles.</strong> Current AI builders terminate at transient cloud previews. Professional engineering necessitates automated containerisation, reverse proxying, load distribution, and continuous telemetry monitoring [12]. Commercial platforms deliberately omit these components to compel users into proprietary hosting subscriptions.</p>
+<p>The technical evaluation of existing platforms exposes two major engineering gaps:</p>
+<p><strong>Gap 1: Accidental Code Breakage During Minor Edits (The Prompt Trap).</strong> While AI models excel at generating new projects from scratch, natural language is imprecise for tiny visual edits. When a user asks the AI to adjust padding, font size, or a button's location, the AI often rewrites the entire file. This frequently breaks existing React state, erases previously working functions, and consumes unnecessary AI tokens. Current platforms lack an in-place visual tool to click and modify elements directly in the code without sending repeated AI prompts [10].</p>
+<p><strong>Gap 2: Missing Production DevOps and Deployment Infrastructure.</strong> Commercial AI builders stop at temporary browser previews. However, real-world deployment requires production-ready Docker containers [8], reverse proxying with load balancing [4], and server monitoring with metrics [5, 6]. Existing platforms deliberately omit these deployment tools to force users into expensive proprietary hosting plans.</p>
 </div>
+
+<!-- PAGE 7: 3. PROBLEM FORMULATION & 4. OBJECTIVES -->
 <div class="page">
 <h1 class="sec-heading">3. PROBLEM FORMULATION</h1>
-<p><strong>Need and Significance of Proposed Work:</strong> The democratisation of software development through conversational AI is currently impeded by architectural rigidity, commercial monopolisation, and developer disempowerment. Software engineers, student researchers, and emerging startups are constrained by platforms that enforce heavy monthly subscriptions, strictly ration token consumption, and trap generated applications inside proprietary hosting black-boxes.</p>
+<p><strong>Need and Significance of Proposed Work:</strong> Modern AI website builders make web development faster, but they have major drawbacks that limit students, independent developers, and small teams. Existing commercial platforms charge high monthly subscriptions, enforce strict limits on AI usage, and lock generated projects inside closed hosting environments without easy self-deployment.</p>
 <p>Specifically, this investigation addresses the following core problems:</p>
 <ul class="bullet-list">
-  <li><strong>Destructive Code Regeneration:</strong> The absence of granular manual editing mechanisms forces users to repeatedly prompt generative models for trivial visual changes, resulting in high latency, token depletion, and frequent logic regressions.</li>
-  <li><strong>Client-Side Execution Fragility:</strong> Reliance on in-browser WebContainers exposes users to memory saturation crashes on standard consumer hardware, preventing execution of production-scale microservice stacks.</li>
-  <li><strong>Disconnection from Version Control Ecosystems:</strong> Existing platforms treat Git integration as a secondary export feature rather than a continuous, bidirectional development pipeline. Developers cannot easily import existing Git repositories, branch, edit, and push code back to GitHub seamlessly.</li>
-  <li><strong>Absence of Industrial-Grade DevOps Infrastructure:</strong> Current tools provide no automated containerisation or infrastructure observability, leaving developers without standardized Docker deployment manifests, Nginx reverse proxy load balancing, or telemetry monitoring.</li>
+  <li><strong>Loss of Manual Control (Accidental Code Breakage):</strong> Without direct visual editing tools, users must write repeated AI prompts for tiny styling changes (like moving a button or changing colors). This frequently causes the AI to rewrite the entire file, which introduces new bugs, erases custom logic, and wastes AI tokens.</li>
+  <li><strong>High Browser Memory Consumption:</strong> In-browser runtimes like WebContainers run full Node.js processes directly in the user's browser, leading to high CPU and RAM usage, sluggish performance on standard laptops, and frequent browser tab crashes.</li>
+  <li><strong>Incomplete GitHub Integration:</strong> Existing tools do not provide smooth, two-way GitHub synchronisation. Users cannot easily import their existing GitHub repositories, create branches, edit code, and push updates back to GitHub, nor download clean, standalone ZIP archives [7].</li>
+  <li><strong>Missing Production DevOps Infrastructure:</strong> Commercial platforms provide temporary preview links instead of real-world deployment tools. They lack containerisation with Docker [8], load balancing with Nginx [4], and system performance monitoring with Prometheus and Grafana [5, 6].</li>
 </ul>
-<p><strong>Target Audience and Impact:</strong> Addressing these deficiencies directly empowers academic researchers, computer science students, and independent developers by providing a transparent, vendor-neutral web synthesis environment that delivers industrial software engineering standards at zero infrastructure cost.</p>
+<p><strong>Target Audience and Impact:</strong> Solving these issues helps students, software engineers, and small teams by providing an open, easy-to-use, and production-ready web builder that gives developers complete control over their code and deployment.</p>
 
 <h1 class="sec-heading" style="margin-top: 0.35cm;">4. OBJECTIVES</h1>
 <p class="no-indent">To effectively resolve the formulated problems, the proposed project defines the following five concrete, measurable, and action-verb-led engineering objectives:</p>
 <ol class="obj-list">
-  <li><strong>Design and implement</strong> a resilient, multi-engine full-stack web application synthesis pipeline that couples high-parameter LLM API streaming with a local, rule-based synthetic generator to ensure uninterrupted offline and rate-limit fallback capabilities.</li>
-  <li><strong>Develop</strong> an interactive, synchronized workspace integrating a Monaco code IDE, an isolated iframe runtime, and a hybrid in-place visual DOM inspector enabling instantaneous styling and positioning modifications without prompt re-synthesis or token consumption.</li>
-  <li><strong>Integrate</strong> a bidirectional GitHub version control engine supporting remote repository cloning, branch-based commit creation, and direct code push operations, complemented by one-click complete source code ZIP compilation.</li>
-  <li><strong>Architect and containerise</strong> the application ecosystem using Docker and Docker Compose, incorporating an Nginx layer-7 reverse proxy with automated round-robin load balancing, SSL termination, and static asset caching.</li>
-  <li><strong>Deploy and evaluate</strong> an end-to-end telemetry and observability framework utilizing Prometheus for time-series metric collection and Grafana for real-time visualization of container health, request latencies, and system throughput.</li>
+  <li><strong>Design and implement</strong> an AI web synthesis engine using Google Gemini API [2] with fallback templates to generate complete full-stack web applications quickly with 100% uptime.</li>
+  <li><strong>Develop</strong> an interactive dual-mode workspace combining a Monaco code editor, a live sandboxed preview, and an in-place visual DOM inspector [10] that lets users click and style elements without using AI tokens.</li>
+  <li><strong>Integrate</strong> bidirectional GitHub synchronization [7] to import existing repositories, create branches, make commits, and push code directly to GitHub, along with one-click clean ZIP source downloads.</li>
+  <li><strong>Architect and containerise</strong> the full-stack system using Docker and Docker Compose [8], setting up an Nginx reverse proxy with round-robin load balancing and static file caching [4].</li>
+  <li><strong>Implement</strong> an end-to-end monitoring system using Prometheus [5] to collect application metrics (via <code>/metrics</code>) and Grafana [6] dashboards to visualize server response times, request throughput, and container health.</li>
 </ol>
 </div>
+
+<!-- PAGE 8: 5. METHODOLOGY / PLANNING OF WORK -->
 <div class="page">
 <h1 class="sec-heading">5. METHODOLOGY / PLANNING OF WORK</h1>
-<p>The methodology adopts an empirical, modular engineering workflow divided into five systematic phases executed over the project lifecycle.</p>
+<p>The methodology follows a modular, engineering-driven approach divided into structured phases across the project lifecycle.</p>
 
 <h2 class="sub-heading">5.1 System Architecture and Modular Design</h2>
-<p>The system is engineered as an enterprise microservice architecture composed of decoupled, specialized subsystems:</p>
+<p>The system is engineered as a decoupled, multi-tier microservice architecture:</p>
 <ul class="bullet-list">
-  <li><strong>Frontend Client Interface:</strong> Implemented in React 19, utilizing Tailwind CSS and Lucide icons. It establishes a multi-view layout comprising a project dashboard, template gallery, live chat drawer, multi-file code editor (Monaco), and an isolated preview viewport.</li>
-  <li><strong>Visual DOM-to-Source Bridge:</strong> An embedded observer script injected into the preview iframe captures user click events on rendered DOM nodes, displays a floating property manipulation toolbar (padding, margin, positioning, background, typography), and synchronizes modified CSS rules back to the parent React state tree without invoking the LLM API.</li>
-  <li><strong>Backend Orchestration Service:</strong> Built on Node.js 20 and Express.js, handling user authentication, rate limiting, and project versioning backed by MongoDB Atlas.</li>
-  <li><strong>Synthesis & Streaming Engine:</strong> Employs Server-Sent Events (SSE) to stream raw token streams from Gemini APIs directly to the Monaco editor buffer, parsing multi-file delimiters in real time.</li>
+  <li><strong>Frontend Client Interface:</strong> Built using React 19 and Tailwind CSS [1, 9]. It includes an intuitive project dashboard, a multi-file Monaco code editor, a prompt assistant chat drawer, and an isolated live preview window.</li>
+  <li><strong>In-Place Visual DOM Inspector:</strong> Allows users to click on any visual element inside the live preview iframe. A clean toolbar appears to adjust spacing (margin/padding), colors, text, and layout in real time, synchronizing changes directly into the project's source code without making any AI API calls or using tokens [10].</li>
+  <li><strong>Backend Orchestration Service:</strong> Powered by Node.js and Express.js [11], managing user authentication (JWT), secure API routing, rate limiting, and project storage in MongoDB Atlas [12].</li>
+  <li><strong>AI Code Synthesis Engine:</strong> Connects to Google Gemini API [2] using Server-Sent Events (SSE) to stream generated multi-file project code directly to the editor with sub-second response times, supported by built-in fallback project templates.</li>
 </ul>
 
 <h2 class="sub-heading">5.2 Study Settings and Experimental Testbed</h2>
-<p>System development and performance validation will be conducted across two distinct environments:</p>
+<p>System development and performance validation are conducted across two distinct environments:</p>
 <ul class="bullet-list">
-  <li><strong>Development Testbed:</strong> macOS and Linux workstations running Node.js 20 LTS, Vite 8 development servers, and local Docker daemon environments.</li>
-  <li><strong>Cloud Production Staging:</strong> Amazon Web Services (AWS) Elastic Compute Cloud (EC2) instances running Ubuntu Linux 24.04 LTS, equipped with 4 vCPUs and 8GB RAM, configured with multi-container Docker Compose stacks.</li>
+  <li><strong>Local Workstations:</strong> macOS and Linux machines running Node.js 20, Vite development servers [3], and local Docker daemons [8].</li>
+  <li><strong>Production Server:</strong> AWS EC2 cloud instance running Ubuntu Linux, orchestrating the multi-container Docker Compose stack with Nginx reverse proxy load balancing [4].</li>
 </ul>
 
 <h2 class="sub-heading">5.3 Sampling and Benchmark Prompts</h2>
-<p>The synthesis engine will be evaluated using a curated benchmark suite comprising 50 diverse application specifications across five commercial domains: E-Commerce catalogs, SaaS analytics dashboards, portfolios, productivity boards, and healthcare service portals.</p>
+<p>The AI generator is evaluated using 50 diverse application prompts across five key categories: E-Commerce stores, SaaS analytics dashboards, personal portfolios, task management boards, and blog portals.</p>
 
 <h2 class="sub-heading">5.4 Quantitative Variables and Performance Controls</h2>
-<p>System efficacy will be quantitatively evaluated across the following parameters:</p>
+<p>System efficacy is quantitatively evaluated across the following parameters:</p>
 <ul class="bullet-list">
-  <li><strong>Independent Variables:</strong> Prompt token length, domain complexity, user edit mode (conversational vs visual inspector).</li>
-  <li><strong>Dependent Variables:</strong> Time to First Token (TTFT), complete synthesis duration (seconds), AST syntactical validity rate (%), and token expenditure per minor edit.</li>
-  <li><strong>Controlled Baselines:</strong> Identical prompts will be executed on Bolt.new and Lovable.dev to benchmark resource consumption, latency, and compilation stability.</li>
+  <li><strong>Independent Variables:</strong> Prompt description complexity, chosen application domain, and user editing method (natural language prompt vs. direct visual inspector).</li>
+  <li><strong>Dependent Variables:</strong> Generation speed (time to first token and total build time), token usage for visual edits (zero tokens with inspector), code execution success rate, and server response latency.</li>
+  <li><strong>Controlled Baseline:</strong> The platform's performance is benchmarked against commercial tools (Bolt.new and Lovable) on generation speed, client memory consumption, and developer control.</li>
 </ul>
 </div>
+
+<!-- PAGE 9: 5.5 DEVOPS & 6. ACTIVITY CHART -->
 <div class="page">
 <h2 class="sub-heading">5.5 DevOps Infrastructure: Containerisation, Load Balancing & Observability</h2>
-<p style="text-indent: 0;">In compliance with modern cloud engineering standards, the complete application stack is containerised and monitored as depicted in Figure 2:</p>
+<p style="text-indent: 0;">To meet modern cloud deployment standards, the complete application stack is containerised with Docker [8], load balanced using Nginx [4], and monitored using Prometheus [5] and Grafana [6], as illustrated in Figure 2:</p>
 
 <div style="text-align: center; margin: 0.05cm 0;">
   <svg width="600" height="185" viewBox="0 0 700 230" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff; border:1px solid #ccc; border-radius:4px; max-width: 100%;">
@@ -569,7 +591,7 @@ ol.references-list li { margin-bottom: 0.18cm; text-align: justify; }
     </tr>
     <tr>
       <td><strong>Weeks 7–8</strong></td>
-      <td>Development of hybrid in-place visual DOM inspector and CSS AST synchroniser.</td>
+      <td>Development of hybrid in-place visual DOM inspector and CSS style synchroniser.</td>
       <td>Bhumika Padiyar & Lakshita Pandey</td>
       <td>Zero-Token Visual Editor</td>
     </tr>
@@ -594,23 +616,50 @@ ol.references-list li { margin-bottom: 0.18cm; text-align: justify; }
   </tbody>
 </table>
 </div>
+
+<!-- PAGE 10: REFERENCES -->
 <div class="page page-last">
 <h1 class="sec-heading">REFERENCES</h1>
-<p class="no-indent">(References are listed in chronological order of appearance in the text following IEEE / Vancouver format):</p>
+<p class="no-indent">(References are listed in order of citation in the text following IEEE format, with notes on their role in GenWeb.ai):</p>
 <ol class="references-list">
-  <li>A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, L. Kaiser and I. Polosukhin, "Attention Is All You Need", <em>Advances in Neural Information Processing Systems (NeurIPS)</em>, vol. 30, pp. 5998–6008, 2017.</li>
-  <li>M. Chen, J. Tworek, H. Jun, Q. Yuan, H. P. d. O. Pinto, J. Kaplan, H. Edwards, Y. Burda, N. Joseph, G. Brockman, et al., "Evaluating Large Language Models Trained on Code", <em>arXiv preprint arXiv:2107.03374</em>, pp. 1–42, 2021.</li>
-  <li>R. Minelli, A. Mocci and M. Lanza, "I Know What You Did Last Summer: An Investigation on How Developers Spend Their Time", <em>Proceedings of the IEEE International Conference on Program Comprehension (ICPC)</em>, Florence, Italy, pp. 25–35, 2015.</li>
-  <li>S. Bhati, A. K. Sharma and R. Verma, "Comparative Analysis of Generative AI Platforms in Modern Web Application Engineering", <em>IEEE Transactions on Software Engineering and Artificial Intelligence</em>, vol. 12, no. 3, pp. 114–128, 2024.</li>
-  <li>J. Kaplan, S. McCandlish, T. Henighan, T. B. Brown, B. Chess, R. Child, S. Gray, A. Radford, J. Wu and D. Amodei, "Scaling Laws for Neural Language Models", <em>arXiv preprint arXiv:2001.08361</em>, pp. 1–24, 2020.</li>
-  <li>P. Denny, V. Kumar and N. Giacaman, "Conversational Programmers: The Impact of Conversational AI on Early Programming Behavior", <em>Proceedings of the ACM Conference on Computer-Supported Cooperative Work and Social Computing (CSCW)</em>, New York, USA, pp. 142–159, 2023.</li>
-  <li>R. Li, L. B. Allal, Y. Zi, N. Muennighoff, D. Kocetkov, C. Mou, M. Marone, C. Akiki, J. Li, J. Chim, et al., "StarCoder: May the Source Be with You!", <em>ACM Transactions on Computer Systems</em>, vol. 42, no. 2, pp. 1–38, 2023.</li>
-  <li>Gemini Team, Google, "Gemini 1.5: Unlocking Multimodal Understanding Across Millions of Tokens of Context", <em>Google DeepMind Technical Report</em>, Mountain View, CA, USA, pp. 1–64, 2024.</li>
-  <li>P. Vaithilingam, T. Zhang and E. L. Glassman, "Expectation vs. Experience: Evaluating the Usability of Code Generation Tools Powered by Large Language Models", <em>Proceedings of the CHI Conference on Human Factors in Computing Systems</em>, New Orleans, LA, USA, pp. 1–15, 2022.</li>
-  <li>E. Aftandilian, R. Sauciuc, S. Priya and S. Krishnan, "Building Developer Tooling with Abstract Syntax Tree Analysis and Machine Learning", <em>IEEE Software</em>, vol. 38, no. 4, pp. 52–61, 2021.</li>
-  <li>T. Sulistio, A. B. M. Alim and C. P. Tan, "Browser-Based Micro-Virtualisation: Evaluating WebAssembly and WebContainers for Developer Environments", <em>Software: Practice and Experience</em>, vol. 54, no. 6, pp. 889–907, 2024.</li>
-  <li>D. Merkel, "Docker: Lightweight Linux Containers for Consistent Development and Deployment", <em>Linux Journal</em>, vol. 2014, no. 239, pp. 2–9, 2014.</li>
+  <li>Meta Open Source, "React: A JavaScript Library for Building User Interfaces," <em>Meta Platforms Inc. Documentation</em>, 2024. [Online]. Available: https://react.dev.
+    <span class="ref-role">(Role in Project: Used for constructing the interactive client workspace, UI state management, and modular component hierarchy).</span>
+  </li>
+  <li>Google DeepMind, "Google Gemini API Developer Guide and Model Capabilities," <em>Google Cloud Documentation</em>, 2024. [Online]. Available: https://ai.google.dev/docs.
+    <span class="ref-role">(Role in Project: Powers the multi-file full-stack code synthesis engine with fast streaming responses).</span>
+  </li>
+  <li>Evan You and Vite Core Team, "Vite: Next Generation Frontend Tooling," <em>Vitejs Documentation</em>, 2024. [Online]. Available: https://vite.dev.
+    <span class="ref-role">(Role in Project: Provides high-speed frontend bundling, local development server, and optimized production builds).</span>
+  </li>
+  <li>Igor Sysoev and F5 NGINX, "NGINX Reverse Proxy and HTTP Load Balancing Administration Guide," <em>F5 Networks Documentation</em>, 2024. [Online]. Available: https://nginx.org/en/docs.
+    <span class="ref-role">(Role in Project: Implements layer-7 reverse proxying, SSL termination, and round-robin traffic balancing across backend replicas).</span>
+  </li>
+  <li>Cloud Native Computing Foundation (CNCF), "Prometheus: An Open-Source Systems Monitoring and Alerting Toolkit," <em>Prometheus Documentation</em>, 2024. [Online]. Available: https://prometheus.io/docs.
+    <span class="ref-role">(Role in Project: Collects real-time system performance metrics, endpoint latency, and CPU/memory usage via the /metrics endpoint).</span>
+  </li>
+  <li>Grafana Labs, "Grafana: The Open Observability and Interactive Visualization Platform," <em>Grafana Documentation</em>, 2024. [Online]. Available: https://grafana.com/docs.
+    <span class="ref-role">(Role in Project: Renders live visual dashboards for server health, request throughput, and production cluster status).</span>
+  </li>
+  <li>GitHub Developer Team, "GitHub REST API and Git Database API Documentation," <em>GitHub Docs</em>, 2024. [Online]. Available: https://docs.github.com/en/rest.
+    <span class="ref-role">(Role in Project: Enables seamless bidirectional Git sync, remote repository cloning, branch management, and automated code commits).</span>
+  </li>
+  <li>Docker Inc., "Docker Engine and Docker Compose Multi-Container Architecture Guide," <em>Docker Documentation</em>, 2024. [Online]. Available: https://docs.docker.com.
+    <span class="ref-role">(Role in Project: Packages frontend, backend, Nginx, and monitoring services into isolated, reproducible lightweight containers).</span>
+  </li>
+  <li>Adam Wathan et al., "Tailwind CSS: A Utility-First CSS Framework for Rapid UI Development," <em>Tailwind Labs Documentation</em>, 2024. [Online]. Available: https://tailwindcss.com/docs.
+    <span class="ref-role">(Role in Project: Enables fast responsive styling and dynamic CSS property updates within the visual DOM inspector).</span>
+  </li>
+  <li>Mozilla Developer Network (MDN), "Window.postMessage() API: Cross-Origin Communication," <em>MDN Web Docs</em>, Mozilla Corporation, 2024. [Online]. Available: https://developer.mozilla.org.
+    <span class="ref-role">(Role in Project: Facilitates secure event messaging between the parent workspace application and the sandboxed preview iframe).</span>
+  </li>
+  <li>OpenJS Foundation, "Express: Fast, Unopinionated, Minimalist Web Framework for Node.js," <em>Expressjs Documentation</em>, 2024. [Online]. Available: https://expressjs.com.
+    <span class="ref-role">(Role in Project: Powers the REST API gateway, JWT authentication middleware, and Server-Sent Events (SSE) streaming).</span>
+  </li>
+  <li>MongoDB Inc., "MongoDB Atlas Multi-Cloud Database Architecture & Mongoose ODM Manual," <em>MongoDB Documentation</em>, 2024. [Online]. Available: https://www.mongodb.com/docs.
+    <span class="ref-role">(Role in Project: Stores user project data, file system hierarchies, user credentials, and generation history).</span>
+  </li>
 </ol>
 </div>
+
 </body>
 </html>
