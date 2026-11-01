@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
 
 const connectDb = require('./config/database.js');
+const { register, metricsMiddleware } = require('./config/metrics.js');
 const authRouter = require('./routes/auth.routes.js');
 const userRouter = require('./routes/user.routes.js');
 const projectRouter = require('./routes/project.routes.js');
@@ -64,6 +65,7 @@ app.use(cors({
 
 app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
+app.use(metricsMiddleware);
 
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -90,6 +92,16 @@ const apiLimiter = rateLimit({
 
 app.get('/', (req, res) => {
     res.send('Hello World');
+});
+
+// Prometheus Scrape Endpoint
+app.get('/metrics', async (req, res) => {
+    try {
+        res.setHeader('Content-Type', register.contentType);
+        res.send(await register.metrics());
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
 });
 
 app.get('/site/:id', deployCtrl.servePublicSite);
