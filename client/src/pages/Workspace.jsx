@@ -12,8 +12,16 @@ import {
     Save, FileCode, Folder, FolderOpen, ChevronRight, ChevronDown,
     Check, Copy, History, X, MessageSquare, Layers, Settings,
     ArrowLeft, CheckCircle2, AlertCircle, Terminal, Globe, Search,
-    PanelLeftClose, PanelLeftOpen
+    PanelLeftClose, PanelLeftOpen, MousePointerClick, Palette, Type,
+    Move, UploadCloud, GitBranch
 } from 'lucide-react';
+
+const GithubIcon = ({ className = 'w-4 h-4', ...props }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+        <path d="M9 18c-4.51 2-5-2-7-2" />
+    </svg>
+);
 
 const VIEW_MODE = { SPLIT: 'split', PREVIEW: 'preview', CODE: 'code' };
 const VIEWPORT = { desktop: '100%', tablet: '768px', mobile: '375px' };
@@ -36,6 +44,209 @@ const timeAgo = (date) => {
     if (mins < 60) return `${mins}m ago`;
     return `${Math.floor(mins / 60)}h ago`;
 };
+
+const INSPECTOR_INJECTION = `
+<style id="gw-inspector-styles">
+  .gw-inspector-hover {
+    outline: 2px dashed #6366f1 !important;
+    outline-offset: -2px !important;
+    cursor: crosshair !important;
+  }
+  .gw-inspector-selected {
+    outline: 2px solid #8b5cf6 !important;
+    outline-offset: -2px !important;
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.3) !important;
+  }
+  #gw-inspector-badge {
+    position: fixed;
+    z-index: 99999999;
+    display: none;
+    pointer-events: none;
+    background: #4f46e5;
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    transition: opacity 0.1s ease;
+  }
+</style>
+<div id="gw-inspector-badge"></div>
+<script id="gw-inspector-script">
+(function() {
+  let isInspectorActive = false;
+  let hoveredEl = null;
+  let selectedEl = null;
+  let elementIdCounter = 1;
+  const badge = document.getElementById('gw-inspector-badge');
+
+  function getUniqueSelector(el) {
+    if (!el || el === document.body || el === document.documentElement) return '';
+    if (el.id) return '#' + el.id;
+    let path = el.tagName.toLowerCase();
+    if (el.className && typeof el.className === 'string') {
+      const firstClass = el.className.trim().split(/\\s+/).find(c => !c.startsWith('gw-'));
+      if (firstClass) path += '.' + firstClass;
+    }
+    return path;
+  }
+
+  function getDirectText(el) {
+    let text = '';
+    for (let node of el.childNodes) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        text += node.textContent;
+      }
+    }
+    text = text.trim();
+    if (!text && el.children.length === 0) {
+      text = (el.innerText || el.textContent || '').trim();
+    }
+    return text;
+  }
+
+  function positionBadge(el) {
+    if (!badge || !el) return;
+    const rect = el.getBoundingClientRect();
+    badge.textContent = '<' + el.tagName.toLowerCase() + '> ' + Math.round(rect.width) + '×' + Math.round(rect.height);
+    badge.style.display = 'block';
+    const top = Math.max(4, rect.top - 24);
+    const left = Math.max(4, rect.left);
+    badge.style.top = top + 'px';
+    badge.style.left = left + 'px';
+  }
+
+  document.addEventListener('mouseover', function(e) {
+    if (!isInspectorActive) return;
+    const target = e.target;
+    if (target === badge || target === document.body || target === document.documentElement) return;
+    if (hoveredEl && hoveredEl !== target) {
+      hoveredEl.classList.remove('gw-inspector-hover');
+    }
+    hoveredEl = target;
+    target.classList.add('gw-inspector-hover');
+    positionBadge(target);
+  }, true);
+
+  document.addEventListener('mouseout', function(e) {
+    if (!isInspectorActive) return;
+    if (e.target && e.target.classList) {
+      e.target.classList.remove('gw-inspector-hover');
+    }
+    if (badge && !hoveredEl) badge.style.display = 'none';
+  }, true);
+
+  document.addEventListener('click', function(e) {
+    if (!isInspectorActive) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    const target = e.target;
+    if (target === badge || target === document.body || target === document.documentElement) return;
+
+    if (selectedEl) {
+      selectedEl.classList.remove('gw-inspector-selected');
+    }
+    selectedEl = target;
+    target.classList.add('gw-inspector-selected');
+
+    if (!target.dataset.gwId) {
+      target.dataset.gwId = 'gw-el-' + (elementIdCounter++);
+    }
+
+    const computed = window.getComputedStyle(target);
+    const text = getDirectText(target);
+    const rawClass = (target.className && typeof target.className === 'string')
+      ? target.className.replace(/gw-inspector-[a-z]+/g, '').trim()
+      : '';
+
+    const payload = {
+      type: 'GENWEB_ELEMENT_SELECTED',
+      data: {
+        gwId: target.dataset.gwId,
+        tagName: target.tagName.toLowerCase(),
+        text: text,
+        className: rawClass,
+        selector: getUniqueSelector(target),
+        styles: {
+          color: computed.color,
+          backgroundColor: computed.backgroundColor,
+          fontSize: computed.fontSize,
+          fontWeight: computed.fontWeight,
+          textAlign: computed.textAlign,
+          padding: computed.padding,
+          margin: computed.margin,
+          borderRadius: computed.borderRadius,
+          display: computed.display
+        }
+      }
+    };
+
+    window.parent.postMessage(payload, '*');
+  }, true);
+
+  window.addEventListener('message', function(event) {
+    const msg = event.data;
+    if (!msg || typeof msg !== 'object') return;
+
+    if (msg.type === 'GENWEB_TOGGLE_INSPECTOR') {
+      isInspectorActive = !!msg.active;
+      if (!isInspectorActive) {
+        if (hoveredEl) hoveredEl.classList.remove('gw-inspector-hover');
+        if (selectedEl) selectedEl.classList.remove('gw-inspector-selected');
+        if (badge) badge.style.display = 'none';
+      }
+    }
+
+    if (msg.type === 'GENWEB_UPDATE_DOM') {
+      const { gwId, text, className, styles } = msg;
+      let target = null;
+      if (gwId) {
+        target = document.querySelector('[data-gw-id="' + gwId + '"]');
+      }
+      if (!target && selectedEl) target = selectedEl;
+      if (!target) return;
+
+      if (text !== undefined && text !== null) {
+        let updated = false;
+        for (let node of target.childNodes) {
+          if (node.nodeType === Node.TEXT_NODE && node.textContent.trim().length > 0) {
+            node.textContent = text;
+            updated = true;
+            break;
+          }
+        }
+        if (!updated) {
+          target.textContent = text;
+        }
+      }
+
+      if (className !== undefined && className !== null) {
+        target.className = className + ' gw-inspector-selected';
+      }
+
+      if (styles && typeof styles === 'object') {
+        for (let prop in styles) {
+          target.style[prop] = styles[prop];
+        }
+      }
+
+      positionBadge(target);
+    }
+
+    if (msg.type === 'GENWEB_DESELECT') {
+      if (selectedEl) selectedEl.classList.remove('gw-inspector-selected');
+      if (badge) badge.style.display = 'none';
+      selectedEl = null;
+    }
+  });
+
+  window.parent.postMessage({ type: 'GENWEB_IFRAME_READY' }, '*');
+})();
+</script>
+`;
 
 // Rock-solid React 18 & HTML5 Preview Bundler
 const bundlePreviewHtml = (fileContentsMap, framework) => {
@@ -80,7 +291,10 @@ const bundlePreviewHtml = (fileContentsMap, framework) => {
                 : html + `<script data-inlined="script.js">\n${fileContentsMap['script.js']}\n<\/script>`;
         }
 
-        return html;
+        if (html.includes('</body>')) {
+            return html.replace('</body>', `${INSPECTOR_INJECTION}\n</body>`);
+        }
+        return html + INSPECTOR_INJECTION;
     }
 
     const cssContent = fileContentsMap['src/index.css'] || fileContentsMap['index.css'] || fileContentsMap['styles.css'] || fileContentsMap['src/styles.css'] || '';
@@ -347,6 +561,7 @@ const bundlePreviewHtml = (fileContentsMap, framework) => {
       );
     }
   </script>
+  ${INSPECTOR_INJECTION}
 </body>
 </html>`;
 };
@@ -386,6 +601,26 @@ export default function Workspace() {
     const editorRef = useRef(null);
     const autoSaveTimer = useRef(null);
     const generationTriggered = useRef(false);
+
+    // Visual DOM Inspector States
+    const [isInspectorActive, setIsInspectorActive] = useState(false);
+    const [selectedElement, setSelectedElement] = useState(null);
+    const [origElemData, setOrigElemData] = useState(null);
+    const [customClassInput, setCustomClassInput] = useState('');
+    const iframeRef = useRef(null);
+    const visualAutoSaveTimer = useRef(null);
+
+    // GitHub Bidirectional Integration States
+    const [showGithubModal, setShowGithubModal] = useState(false);
+    const [githubTab, setGithubTab] = useState('push');
+    const [githubToken, setGithubToken] = useState(() => localStorage.getItem('genweb_gh_token') || '');
+    const [githubRepoName, setGithubRepoName] = useState('');
+    const [githubBranch, setGithubBranch] = useState('main');
+    const [githubCommitMsg, setGithubCommitMsg] = useState('feat: update website components via GenWeb AI');
+    const [githubImportUrl, setGithubImportUrl] = useState('');
+    const [githubPushing, setGithubPushing] = useState(false);
+    const [githubPushResult, setGithubPushResult] = useState(null);
+    const [githubImporting, setGithubImporting] = useState(false);
 
     const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://3.110.167.167:3000';
 
@@ -886,6 +1121,193 @@ export default function Workspace() {
         }
     };
 
+    useEffect(() => {
+        if (project?.name && !githubRepoName) {
+            setGithubRepoName(project.name.toLowerCase().replace(/[^a-z0-9_-]/g, '-'));
+        }
+    }, [project?.name, githubRepoName]);
+
+    useEffect(() => {
+        iframeRef.current?.contentWindow?.postMessage({
+            type: 'GENWEB_TOGGLE_INSPECTOR',
+            active: isInspectorActive
+        }, '*');
+        if (!isInspectorActive) {
+            setSelectedElement(null);
+            setOrigElemData(null);
+        }
+    }, [isInspectorActive]);
+
+    useEffect(() => {
+        const handleMessage = (e) => {
+            if (!e.data || typeof e.data !== 'object') return;
+            if (e.data.type === 'GENWEB_IFRAME_READY') {
+                if (isInspectorActive) {
+                    iframeRef.current?.contentWindow?.postMessage({
+                        type: 'GENWEB_TOGGLE_INSPECTOR',
+                        active: true
+                    }, '*');
+                }
+            }
+            if (e.data.type === 'GENWEB_ELEMENT_SELECTED') {
+                setSelectedElement(e.data.data);
+                setOrigElemData({
+                    text: e.data.data.text,
+                    className: e.data.data.className
+                });
+                setCustomClassInput(e.data.data.className || '');
+            }
+        };
+        window.addEventListener('message', handleMessage);
+        return () => window.removeEventListener('message', handleMessage);
+    }, [isInspectorActive]);
+
+    const triggerVisualAutoSave = useCallback((targetPath, newContent) => {
+        clearTimeout(visualAutoSaveTimer.current);
+        visualAutoSaveTimer.current = setTimeout(async () => {
+            try {
+                await api.put(`/api/projects/${projectId}/files`, {
+                    path: targetPath,
+                    content: newContent
+                });
+                setUnsaved(false);
+            } catch (err) {
+                console.error('Visual editor auto-save error:', err);
+            }
+        }, 800);
+    }, [projectId]);
+
+    const updateSelectedElementText = (newText) => {
+        if (!selectedElement) return;
+
+        iframeRef.current?.contentWindow?.postMessage({
+            type: 'GENWEB_UPDATE_DOM',
+            gwId: selectedElement.gwId,
+            text: newText
+        }, '*');
+
+        const oldText = origElemData?.text;
+        if (oldText && oldText !== newText) {
+            const targetPath = (activeFile && fileContents[activeFile.path]?.includes(oldText))
+                ? activeFile.path
+                : (Object.keys(fileContents).find(p => p.endsWith('.jsx') && fileContents[p]?.includes(oldText)) ||
+                   Object.keys(fileContents).find(p => fileContents[p]?.includes(oldText)));
+
+            if (targetPath && fileContents[targetPath]) {
+                const currentCode = fileContents[targetPath];
+                const updatedCode = currentCode.replace(oldText, newText);
+                setFileContents(prev => ({ ...prev, [targetPath]: updatedCode }));
+                if (activeFile?.path === targetPath) {
+                    setFileContent(updatedCode);
+                }
+                setUnsaved(true);
+                triggerVisualAutoSave(targetPath, updatedCode);
+            }
+        }
+
+        setSelectedElement(prev => ({ ...prev, text: newText }));
+        setOrigElemData(prev => ({ ...prev, text: newText }));
+    };
+
+    const updateSelectedElementClasses = (newClasses) => {
+        if (!selectedElement) return;
+
+        iframeRef.current?.contentWindow?.postMessage({
+            type: 'GENWEB_UPDATE_DOM',
+            gwId: selectedElement.gwId,
+            className: newClasses
+        }, '*');
+
+        const oldClasses = origElemData?.className;
+        if (oldClasses !== undefined && oldClasses !== newClasses) {
+            const targetPath = (activeFile && oldClasses && fileContents[activeFile.path]?.includes(oldClasses))
+                ? activeFile.path
+                : (Object.keys(fileContents).find(p => oldClasses && p.endsWith('.jsx') && fileContents[p]?.includes(oldClasses)) ||
+                   Object.keys(fileContents).find(p => oldClasses && fileContents[p]?.includes(oldClasses)));
+
+            if (targetPath && fileContents[targetPath]) {
+                const currentCode = fileContents[targetPath];
+                const updatedCode = currentCode.replace(oldClasses, newClasses);
+                setFileContents(prev => ({ ...prev, [targetPath]: updatedCode }));
+                if (activeFile?.path === targetPath) {
+                    setFileContent(updatedCode);
+                }
+                setUnsaved(true);
+                triggerVisualAutoSave(targetPath, updatedCode);
+            }
+        }
+
+        setSelectedElement(prev => ({ ...prev, className: newClasses }));
+        setOrigElemData(prev => ({ ...prev, className: newClasses }));
+        setCustomClassInput(newClasses);
+    };
+
+    const applyTailwindStyle = (regex, newClass) => {
+        let classes = (selectedElement?.className || '').split(/\s+/).filter(Boolean);
+        classes = classes.filter(c => !regex.test(c));
+        if (newClass) classes.push(newClass);
+        updateSelectedElementClasses(classes.join(' '));
+    };
+
+    const handleGithubPush = async (e) => {
+        e?.preventDefault();
+        if (!githubToken.trim()) {
+            return toast.error('Please enter your GitHub Personal Access Token');
+        }
+        if (!githubRepoName.trim()) {
+            return toast.error('Please enter a repository name');
+        }
+
+        try {
+            setGithubPushing(true);
+            setGithubPushResult(null);
+            localStorage.setItem('genweb_gh_token', githubToken.trim());
+
+            const { data } = await api.post(`/api/projects/${projectId}/github/push`, {
+                token: githubToken.trim(),
+                repoName: githubRepoName.trim(),
+                branch: githubBranch.trim() || 'main',
+                commitMessage: githubCommitMsg.trim() || 'feat: update website components via GenWeb AI'
+            });
+
+            setGithubPushResult(data);
+            toast.success('Successfully pushed to GitHub!');
+        } catch (err) {
+            toast.error(err.response?.data?.message || 'Failed to push to GitHub');
+        } finally {
+            setGithubPushing(false);
+        }
+    };
+
+    const handleGithubImport = async (e) => {
+        e?.preventDefault();
+        if (!githubImportUrl.trim()) {
+            return toast.error('Please enter a repository URL or owner/repo');
+        }
+
+        try {
+            setGithubImporting(true);
+            if (githubToken.trim()) {
+                localStorage.setItem('genweb_gh_token', githubToken.trim());
+            }
+
+            const { data } = await api.post(`/api/projects/${projectId}/github/import`, {
+                repoUrl: githubImportUrl.trim(),
+                branch: githubBranch.trim() || 'main',
+                token: githubToken.trim() || undefined
+            });
+
+            toast.success(`Imported ${data.importedFilesCount} files from GitHub!`);
+            setShowGithubModal(false);
+            await loadProject();
+            setPreviewKey(k => k + 1);
+        } catch (err) {
+            toast.error(err.response?.data?.message || 'Failed to import repository');
+        } finally {
+            setGithubImporting(false);
+        }
+    };
+
     if (loadingProject) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-[#07080e]">
@@ -994,6 +1416,29 @@ export default function Workspace() {
 
                 {/* Right Action Tools */}
                 <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setIsInspectorActive(!isInspectorActive)}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border ${
+                            isInspectorActive
+                                ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white border-violet-400 shadow-md shadow-indigo-500/25 ring-1 ring-violet-400/50'
+                                : 'text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border-white/[0.06]'
+                        }`}
+                        title="Toggle In-Place Visual DOM Inspector & Editor"
+                    >
+                        <MousePointerClick className={`w-3.5 h-3.5 ${isInspectorActive ? 'animate-bounce text-violet-200' : 'text-slate-400'}`} />
+                        <span className="hidden sm:inline">Visual Edit</span>
+                        {isInspectorActive && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse ml-0.5" />}
+                    </button>
+
+                    <button
+                        onClick={() => setShowGithubModal(true)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] transition-colors"
+                        title="Push or import GitHub repository"
+                    >
+                        <GithubIcon className="w-3.5 h-3.5 text-slate-300" />
+                        <span className="hidden sm:inline">GitHub</span>
+                    </button>
+
                     <button
                         onClick={() => setShowAiChat(!showAiChat)}
                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border ${showAiChat ? 'bg-indigo-600/20 text-indigo-300 border-indigo-500/40 shadow-sm' : 'text-slate-400 hover:text-white border-white/[0.06] hover:bg-white/[0.06]'}`}
@@ -1378,7 +1823,21 @@ export default function Workspace() {
                             </div>
 
                             {/* Viewport Frame Container */}
-                            <div className="flex-1 flex items-center justify-center p-3 overflow-hidden bg-[#07080e]">
+                            <div className="flex-1 flex items-center justify-center p-3 overflow-hidden bg-[#07080e] relative">
+                                <AnimatePresence>
+                                    {isInspectorActive && !selectedElement && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -10 }}
+                                            className="absolute top-5 z-30 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-950/80 border border-violet-500/40 text-violet-200 text-xs font-medium shadow-xl backdrop-blur-md pointer-events-none"
+                                        >
+                                            <MousePointerClick className="w-3.5 h-3.5 text-violet-400 animate-pulse" />
+                                            <span>Click any element on preview canvas to inspect & edit</span>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+
                                 <div
                                     className="h-full transition-all duration-300 flex flex-col items-center justify-center"
                                     style={{
@@ -1390,6 +1849,7 @@ export default function Workspace() {
                                     }}
                                 >
                                     <iframe
+                                        ref={iframeRef}
                                         key={previewKey}
                                         srcDoc={bundledHtml}
                                         title="Website Preview"
@@ -1397,6 +1857,175 @@ export default function Workspace() {
                                         sandbox="allow-scripts allow-forms allow-modals allow-same-origin"
                                     />
                                 </div>
+
+                                {/* Floating In-Place Element Inspector */}
+                                <AnimatePresence>
+                                    {isInspectorActive && selectedElement && (
+                                        <motion.div
+                                            initial={{ y: 20, opacity: 0, scale: 0.95 }}
+                                            animate={{ y: 0, opacity: 1, scale: 1 }}
+                                            exit={{ y: 20, opacity: 0, scale: 0.95 }}
+                                            className="absolute bottom-5 right-5 z-40 w-96 max-h-[82%] bg-[#0e111d]/95 backdrop-blur-xl border border-indigo-500/40 rounded-2xl p-4 shadow-2xl flex flex-col text-xs overflow-hidden"
+                                        >
+                                            <div className="flex items-center justify-between pb-3 border-b border-white/10 shrink-0">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="px-2 py-0.5 rounded-md bg-indigo-500/20 text-indigo-300 font-mono font-bold text-[11px] border border-indigo-500/30">
+                                                        &lt;{selectedElement.tagName}&gt;
+                                                    </span>
+                                                    <span className="text-[11px] font-mono text-slate-400 truncate max-w-[170px]" title={selectedElement.selector}>
+                                                        {selectedElement.selector || 'element'}
+                                                    </span>
+                                                </div>
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedElement(null);
+                                                        setOrigElemData(null);
+                                                        iframeRef.current?.contentWindow?.postMessage({ type: 'GENWEB_DESELECT' }, '*');
+                                                    }}
+                                                    className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+                                                >
+                                                    <X className="w-3.5 h-3.5" />
+                                                </button>
+                                            </div>
+
+                                            <div className="flex-1 overflow-y-auto py-3 space-y-3 pr-1">
+                                                {selectedElement.text !== undefined && (
+                                                    <div>
+                                                        <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1 block">
+                                                            Element Text
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            value={selectedElement.text}
+                                                            onChange={e => updateSelectedElementText(e.target.value)}
+                                                            placeholder="Enter text..."
+                                                            className="w-full px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs outline-none focus:border-indigo-500 transition-colors"
+                                                        />
+                                                    </div>
+                                                )}
+
+                                                <div>
+                                                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1 block">
+                                                        Background Color
+                                                    </label>
+                                                    <div className="flex items-center gap-1.5 flex-wrap">
+                                                        {[
+                                                            { label: 'None', cls: 'bg-transparent', color: 'border border-dashed border-white/30' },
+                                                            { label: 'Indigo', cls: 'bg-indigo-600', color: 'bg-indigo-600' },
+                                                            { label: 'Purple', cls: 'bg-purple-600', color: 'bg-purple-600' },
+                                                            { label: 'Cyan', cls: 'bg-cyan-500', color: 'bg-cyan-500' },
+                                                            { label: 'Emerald', cls: 'bg-emerald-600', color: 'bg-emerald-600' },
+                                                            { label: 'Rose', cls: 'bg-rose-600', color: 'bg-rose-600' },
+                                                            { label: 'Amber', cls: 'bg-amber-600', color: 'bg-amber-600' },
+                                                            { label: 'Slate', cls: 'bg-slate-800', color: 'bg-slate-800' },
+                                                            { label: 'Gradient', cls: 'bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500', color: 'bg-gradient-to-r from-indigo-500 to-pink-500' }
+                                                        ].map(b => (
+                                                            <button
+                                                                key={b.label}
+                                                                onClick={() => applyTailwindStyle(/^bg-/, b.cls)}
+                                                                title={b.label}
+                                                                className={`w-6 h-6 rounded-lg ${b.color} hover:scale-110 active:scale-95 transition-all shadow-sm`}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1 block">
+                                                        Text Color
+                                                    </label>
+                                                    <div className="flex items-center gap-1.5 flex-wrap">
+                                                        {[
+                                                            { label: 'White', cls: 'text-white', color: 'bg-white' },
+                                                            { label: 'Slate', cls: 'text-slate-300', color: 'bg-slate-400' },
+                                                            { label: 'Indigo', cls: 'text-indigo-400', color: 'bg-indigo-400' },
+                                                            { label: 'Cyan', cls: 'text-cyan-400', color: 'bg-cyan-400' },
+                                                            { label: 'Emerald', cls: 'text-emerald-400', color: 'bg-emerald-400' },
+                                                            { label: 'Rose', cls: 'text-rose-400', color: 'bg-rose-400' },
+                                                            { label: 'Amber', cls: 'text-amber-400', color: 'bg-amber-400' }
+                                                        ].map(t => (
+                                                            <button
+                                                                key={t.label}
+                                                                onClick={() => applyTailwindStyle(/^text-(white|slate|indigo|cyan|emerald|rose|amber|gray)-?[0-9]*/, t.cls)}
+                                                                title={t.label}
+                                                                className={`w-6 h-6 rounded-lg ${t.color} hover:scale-110 active:scale-95 transition-all shadow-sm`}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </div>
+
+                                                <div className="grid grid-cols-2 gap-2">
+                                                    <div>
+                                                        <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1 block">
+                                                            Alignment
+                                                        </label>
+                                                        <div className="flex items-center gap-1 bg-white/[0.04] p-1 rounded-xl border border-white/10">
+                                                            {['left', 'center', 'right'].map(align => (
+                                                                <button
+                                                                    key={align}
+                                                                    onClick={() => applyTailwindStyle(/^text-(left|center|right)/, `text-${align}`)}
+                                                                    className="flex-1 py-1 text-[11px] rounded-lg capitalize font-medium text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
+                                                                >
+                                                                    {align}
+                                                                </button>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+
+                                                    <div>
+                                                        <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1 block">
+                                                            Corner Radius
+                                                        </label>
+                                                        <div className="flex items-center gap-1 bg-white/[0.04] p-1 rounded-xl border border-white/10">
+                                                            {[
+                                                                { label: 'None', cls: 'rounded-none' },
+                                                                { label: 'MD', cls: 'rounded-xl' },
+                                                                { label: 'Pill', cls: 'rounded-full' }
+                              ].map(r => (
+                                                                <button
+                                                                    key={r.label}
+                                                                    onClick={() => applyTailwindStyle(/^rounded(-[a-z0-9]+)?$/, r.cls)}
+                                                                    className="flex-1 py-1 text-[11px] rounded-lg font-medium text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
+                                                                >
+                                                                    {r.label}
+                                                                </button>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1 flex items-center justify-between">
+                                                        <span>Tailwind Classes</span>
+                                                        <span className="text-slate-500 font-normal">Press Enter</span>
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        value={customClassInput}
+                                                        onChange={e => setCustomClassInput(e.target.value)}
+                                                        onKeyDown={e => {
+                                                            if (e.key === 'Enter') {
+                                                                e.preventDefault();
+                                                                updateSelectedElementClasses(customClassInput);
+                                                            }
+                                                        }}
+                                                        onBlur={() => updateSelectedElementClasses(customClassInput)}
+                                                        placeholder="e.g. px-6 py-2.5 shadow-lg..."
+                                                        className="w-full px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 font-mono text-[11px] text-indigo-200 outline-none focus:border-indigo-500 transition-colors"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="pt-2.5 border-t border-white/10 flex items-center justify-between text-[10px] text-emerald-400 font-medium shrink-0">
+                                                <div className="flex items-center gap-1.5">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                                    <span>Zero-Token Instant Sync</span>
+                                                </div>
+                                                <span className="text-slate-500 font-mono">0ms latency</span>
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </div>
                         </div>
                     )}
@@ -1518,6 +2147,233 @@ export default function Workspace() {
                                     </button>
                                 </div>
                             </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+
+                {/* Bidirectional GitHub Sync Modal */}
+                {showGithubModal && (
+                    <motion.div
+                        className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/80 backdrop-blur-md"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setShowGithubModal(false)}
+                    >
+                        <motion.div
+                            className="w-full max-w-lg rounded-2xl bg-[#0e111d] border border-white/10 p-6 shadow-2xl"
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className="flex items-center justify-between pb-4 border-b border-white/10">
+                                <div className="flex items-center gap-2">
+                                    <GithubIcon className="w-5 h-5 text-white" />
+                                    <h3 className="text-sm font-bold text-white">GitHub Integration</h3>
+                                </div>
+                                <button onClick={() => setShowGithubModal(false)} className="p-1 rounded text-slate-400 hover:text-white">
+                                    <X className="w-4 h-4" />
+                                </button>
+                            </div>
+
+                            {/* Modal Tabs */}
+                            <div className="flex border-b border-white/10 mt-4">
+                                <button
+                                    onClick={() => { setGithubTab('push'); setGithubPushResult(null); }}
+                                    className={`flex-1 py-2 text-xs font-semibold border-b-2 transition-colors flex items-center justify-center gap-1.5 ${
+                                        githubTab === 'push'
+                                            ? 'border-indigo-500 text-white'
+                                            : 'border-transparent text-slate-400 hover:text-slate-200'
+                                    }`}
+                                >
+                                    <UploadCloud className="w-3.5 h-3.5" />
+                                    <span>Push to GitHub</span>
+                                </button>
+                                <button
+                                    onClick={() => { setGithubTab('import'); setGithubPushResult(null); }}
+                                    className={`flex-1 py-2 text-xs font-semibold border-b-2 transition-colors flex items-center justify-center gap-1.5 ${
+                                        githubTab === 'import'
+                                            ? 'border-indigo-500 text-white'
+                                            : 'border-transparent text-slate-400 hover:text-slate-200'
+                                    }`}
+                                >
+                                    <GitBranch className="w-3.5 h-3.5" />
+                                    <span>Import Repository</span>
+                                </button>
+                            </div>
+
+                            {/* Tab 1: Push */}
+                            {githubTab === 'push' && (
+                                <form onSubmit={handleGithubPush} className="py-4 space-y-3.5">
+                                    <div>
+                                        <div className="flex items-center justify-between mb-1">
+                                            <label className="text-xs font-semibold text-slate-300">
+                                                Personal Access Token (PAT)
+                                            </label>
+                                            <a
+                                                href="https://github.com/settings/tokens/new?scopes=repo&description=GenWeb+AI+Integration"
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="text-[10px] text-indigo-400 hover:underline flex items-center gap-0.5"
+                                            >
+                                                <span>Generate PAT</span>
+                                                <ExternalLink className="w-2.5 h-2.5" />
+                                            </a>
+                                        </div>
+                                        <input
+                                            type="password"
+                                            value={githubToken}
+                                            onChange={e => setGithubToken(e.target.value)}
+                                            placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+                                            className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs outline-none focus:border-indigo-500 font-mono"
+                                        />
+                                        <p className="text-[10px] text-slate-500 mt-1">Saved locally in your browser for seamless one-click commits.</p>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label className="text-xs font-semibold text-slate-300 mb-1 block">Repository Name</label>
+                                            <input
+                                                type="text"
+                                                value={githubRepoName}
+                                                onChange={e => setGithubRepoName(e.target.value)}
+                                                placeholder="my-awesome-site"
+                                                className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs outline-none focus:border-indigo-500 font-mono"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-xs font-semibold text-slate-300 mb-1 block">Target Branch</label>
+                                            <input
+                                                type="text"
+                                                value={githubBranch}
+                                                onChange={e => setGithubBranch(e.target.value)}
+                                                placeholder="main"
+                                                className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs outline-none focus:border-indigo-500 font-mono"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="text-xs font-semibold text-slate-300 mb-1 block">Commit Message</label>
+                                        <input
+                                            type="text"
+                                            value={githubCommitMsg}
+                                            onChange={e => setGithubCommitMsg(e.target.value)}
+                                            placeholder="feat: update components"
+                                            className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs outline-none focus:border-indigo-500"
+                                        />
+                                    </div>
+
+                                    {githubPushResult && (
+                                        <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between">
+                                            <div className="flex items-center gap-2">
+                                                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                                                <div>
+                                                    <p className="text-xs font-bold text-emerald-300">Push Succeeded!</p>
+                                                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">SHA: {githubPushResult.commitSha?.slice(0, 7)}</p>
+                                                </div>
+                                            </div>
+                                            <a
+                                                href={githubPushResult.repoUrl}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition-colors"
+                                            >
+                                                <span>View Repo</span>
+                                                <ExternalLink className="w-3 h-3" />
+                                            </a>
+                                        </div>
+                                    )}
+
+                                    <div className="pt-2 flex justify-end gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowGithubModal(false)}
+                                            className="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            disabled={githubPushing || !githubToken.trim() || !githubRepoName.trim()}
+                                            className="flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-95 disabled:opacity-40 transition-all shadow-lg shadow-indigo-500/20"
+                                        >
+                                            {githubPushing ? (
+                                                <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                            ) : (
+                                                <UploadCloud className="w-3.5 h-3.5" />
+                                            )}
+                                            <span>{githubPushing ? 'Committing Files...' : 'Push to GitHub'}</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            )}
+
+                            {/* Tab 2: Import */}
+                            {githubTab === 'import' && (
+                                <form onSubmit={handleGithubImport} className="py-4 space-y-3.5">
+                                    <div>
+                                        <label className="text-xs font-semibold text-slate-300 mb-1 block">Repository URL or Owner/Repo</label>
+                                        <input
+                                            type="text"
+                                            value={githubImportUrl}
+                                            onChange={e => setGithubImportUrl(e.target.value)}
+                                            placeholder="e.g. owner/repo or https://github.com/owner/repo"
+                                            className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs outline-none focus:border-indigo-500 font-mono"
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label className="text-xs font-semibold text-slate-300 mb-1 block">Branch (Optional)</label>
+                                            <input
+                                                type="text"
+                                                value={githubBranch}
+                                                onChange={e => setGithubBranch(e.target.value)}
+                                                placeholder="main"
+                                                className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs outline-none focus:border-indigo-500 font-mono"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-xs font-semibold text-slate-300 mb-1 block">PAT (Required for private)</label>
+                                            <input
+                                                type="password"
+                                                value={githubToken}
+                                                onChange={e => setGithubToken(e.target.value)}
+                                                placeholder="ghp_..."
+                                                className="w-full px-3 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs outline-none focus:border-indigo-500 font-mono"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-[11px] text-amber-300 leading-relaxed">
+                                        ⚠️ Importing will backup your current workspace to a Version Snapshot and load the repository files into your workspace.
+                                    </div>
+
+                                    <div className="pt-2 flex justify-end gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowGithubModal(false)}
+                                            className="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            disabled={githubImporting || !githubImportUrl.trim()}
+                                            className="flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-purple-500 to-indigo-600 hover:opacity-95 disabled:opacity-40 transition-all shadow-lg shadow-purple-500/20"
+                                        >
+                                            {githubImporting ? (
+                                                <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                            ) : (
+                                                <GitBranch className="w-3.5 h-3.5" />
+                                            )}
+                                            <span>{githubImporting ? 'Cloning Trees...' : 'Import Repository'}</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            )}
                         </motion.div>
                     </motion.div>
                 )}
