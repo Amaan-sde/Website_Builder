@@ -24,4 +24,7 @@ projectRouter.delete('/:id/files', projectCtrl.deleteFile);
 projectRouter.get('/:id/versions', projectCtrl.listVersions);
 projectRouter.post('/:id/versions/:versionId/restore', projectCtrl.restoreVersion);
 
+projectRouter.post('/:id/github/push', projectCtrl.pushToGitHub);
+projectRouter.post('/:id/github/import', projectCtrl.importFromGitHub);
+
 module.exports = projectRouter;

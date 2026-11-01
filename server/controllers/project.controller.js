@@ -3,6 +3,7 @@ const ProjectFile = require('../models/projectFile.model.js');
 const ProjectVersion = require('../models/projectVersion.model.js');
 const Conversation = require('../models/conversation.model.js');
 const Template = require('../models/template.model.js');
+const { githubSyncTotal } = require('../config/metrics.js');
 
 const detectLanguage = (path) => {
     const ext = path.split('.').pop().toLowerCase();
@@ -450,4 +451,347 @@ const validateFilePath = (filePath) => {
     if (normalized.includes('..') || normalized.startsWith('/') || normalized.length > 200) return null;
     if (!/^[a-zA-Z0-9_\-./]+$/.test(normalized)) return null;
     return normalized;
+};
+
+exports.pushToGitHub = async (req, res) => {
+    try {
+        const { token, repoName, branch = 'main', commitMessage } = req.body;
+
+        if (!token || !token.trim()) {
+            return res.status(400).json({ message: 'GitHub Personal Access Token is required' });
+        }
+        if (!repoName || !repoName.trim()) {
+            return res.status(400).json({ message: 'Repository name is required' });
+        }
+
+        const project = await Project.findOne({ _id: req.params.id, owner: req.user._id });
+        if (!project) return res.status(404).json({ message: 'Project not found' });
+
+        const cleanToken = token.trim();
+        const cleanRepo = repoName.trim().replace(/^https?:\/\/github\.com\//, '').replace(/\.git$/, '').split('/').pop();
+        const targetBranch = (branch || 'main').trim();
+
+        const ghHeaders = {
+            'Authorization': `Bearer ${cleanToken}`,
+            'Accept': 'application/vnd.github+json',
+            'User-Agent': 'GenWeb-AI-Website-Builder',
+            'X-GitHub-Api-Version': '2022-11-28'
+        };
+
+        // 1. Verify GitHub user
+        const userRes = await fetch('https://api.github.com/user', { headers: ghHeaders });
+        if (!userRes.ok) {
+            const err = await userRes.json().catch(() => ({}));
+            githubSyncTotal.inc({ action: 'push', status: 'auth_failed' });
+            return res.status(userRes.status).json({ message: err.message || 'Invalid GitHub Token' });
+        }
+        const ghUser = await userRes.json();
+        const owner = ghUser.login;
+
+        // 2. Check if repository exists, or create it
+        let repoRes = await fetch(`https://api.github.com/repos/${owner}/${cleanRepo}`, { headers: ghHeaders });
+        if (repoRes.status === 404) {
+            const createRes = await fetch('https://api.github.com/user/repos', {
+                method: 'POST',
+                headers: ghHeaders,
+                body: JSON.stringify({
+                    name: cleanRepo,
+                    description: `${project.name} - Synthesized with GenWeb AI`,
+                    private: false,
+                    auto_init: true
+                })
+            });
+            if (!createRes.ok) {
+                const err = await createRes.json().catch(() => ({}));
+                githubSyncTotal.inc({ action: 'push', status: 'create_repo_failed' });
+                return res.status(createRes.status).json({ message: `Failed to create repo: ${err.message || 'Unknown error'}` });
+            }
+            await new Promise(r => setTimeout(r, 1200));
+            repoRes = await fetch(`https://api.github.com/repos/${owner}/${cleanRepo}`, { headers: ghHeaders });
+        }
+
+        if (!repoRes.ok) {
+            const err = await repoRes.json().catch(() => ({}));
+            githubSyncTotal.inc({ action: 'push', status: 'error' });
+            return res.status(repoRes.status).json({ message: err.message || 'Could not access repository' });
+        }
+        const repoData = await repoRes.json();
+        const defaultBranch = repoData.default_branch || 'main';
+
+        // 3. Load all project files
+        const projectFiles = await ProjectFile.find({ project: project._id }).lean();
+        if (!projectFiles || projectFiles.length === 0) {
+            return res.status(400).json({ message: 'Project has no files to commit' });
+        }
+
+        const filesMap = {};
+        projectFiles.forEach(f => {
+            filesMap[f.path] = f.content || '';
+        });
+
+        if (!filesMap['README.md']) {
+            filesMap['README.md'] = `# ${project.name}\n\n${project.description || 'Full-stack responsive web application'}\n\nBuilt and deployed using [GenWeb AI](http://3.110.221.10:5173).`;
+        }
+
+        const isReact = project.framework === 'react' || Object.keys(filesMap).some(p => p.endsWith('.jsx'));
+        if (isReact && !filesMap['package.json']) {
+            filesMap['package.json'] = JSON.stringify({
+                name: project.name.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+                private: true,
+                version: '1.0.0',
+                type: 'module',
+                scripts: { dev: 'vite', build: 'vite build', preview: 'vite preview' },
+                dependencies: {
+                    react: '^18.3.1',
+                    'react-dom': '^18.3.1',
+                    'lucide-react': '^0.460.0'
+                },
+                devDependencies: {
+                    '@vitejs/plugin-react': '^4.3.1',
+                    vite: '^5.4.0',
+                    tailwindcss: '^3.4.0',
+                    autoprefixer: '^10.4.0',
+                    postcss: '^8.4.0'
+                }
+            }, null, 2);
+        }
+
+        // 4. Get target branch ref or fallback to default branch
+        let branchRefRes = await fetch(`https://api.github.com/repos/${owner}/${cleanRepo}/git/ref/heads/${targetBranch}`, { headers: ghHeaders });
+        let baseCommitSha = null;
+        let baseTreeSha = null;
+
+        if (branchRefRes.ok) {
+            const refData = await branchRefRes.json();
+            baseCommitSha = refData.object.sha;
+        } else {
+            const defaultRefRes = await fetch(`https://api.github.com/repos/${owner}/${cleanRepo}/git/ref/heads/${defaultBranch}`, { headers: ghHeaders });
+            if (defaultRefRes.ok) {
+                const defData = await defaultRefRes.json();
+                baseCommitSha = defData.object.sha;
+            }
+        }
+
+        if (baseCommitSha) {
+            const commitRes = await fetch(`https://api.github.com/repos/${owner}/${cleanRepo}/git/commits/${baseCommitSha}`, { headers: ghHeaders });
+            if (commitRes.ok) {
+                const cData = await commitRes.json();
+                baseTreeSha = cData.tree?.sha;
+            }
+        }
+
+        // 5. Create Blobs
+        const treeItems = [];
+        for (const [filePath, content] of Object.entries(filesMap)) {
+            const blobRes = await fetch(`https://api.github.com/repos/${owner}/${cleanRepo}/git/blobs`, {
+                method: 'POST',
+                headers: ghHeaders,
+                body: JSON.stringify({ content, encoding: 'utf-8' })
+            });
+            if (blobRes.ok) {
+                const bData = await blobRes.json();
+                treeItems.push({
+                    path: filePath,
+                    mode: '100644',
+                    type: 'blob',
+                    sha: bData.sha
+                });
+            }
+        }
+
+        if (treeItems.length === 0) {
+            return res.status(500).json({ message: 'Failed to upload file blobs to GitHub' });
+        }
+
+        // 6. Create Git Tree
+        const treeBody = { tree: treeItems };
+        if (baseTreeSha) treeBody.base_tree = baseTreeSha;
+
+        const treeRes = await fetch(`https://api.github.com/repos/${owner}/${cleanRepo}/git/trees`, {
+            method: 'POST',
+            headers: ghHeaders,
+            body: JSON.stringify(treeBody)
+        });
+        if (!treeRes.ok) {
+            const err = await treeRes.json().catch(() => ({}));
+            return res.status(500).json({ message: `Failed to create Git tree: ${err.message || 'Unknown'}` });
+        }
+        const newTree = await treeRes.json();
+
+        // 7. Create Commit
+        const commitPayload = {
+            message: commitMessage || `Update ${project.name} source files via GenWeb AI`,
+            tree: newTree.sha,
+            parents: baseCommitSha ? [baseCommitSha] : []
+        };
+        const newCommitRes = await fetch(`https://api.github.com/repos/${owner}/${cleanRepo}/git/commits`, {
+            method: 'POST',
+            headers: ghHeaders,
+            body: JSON.stringify(commitPayload)
+        });
+        if (!newCommitRes.ok) {
+            const err = await newCommitRes.json().catch(() => ({}));
+            return res.status(500).json({ message: `Failed to create commit: ${err.message || 'Unknown'}` });
+        }
+        const newCommit = await newCommitRes.json();
+
+        // 8. Update or create branch ref
+        if (branchRefRes.ok) {
+            await fetch(`https://api.github.com/repos/${owner}/${cleanRepo}/git/refs/heads/${targetBranch}`, {
+                method: 'PATCH',
+                headers: ghHeaders,
+                body: JSON.stringify({ sha: newCommit.sha, force: true })
+            });
+        } else {
+            await fetch(`https://api.github.com/repos/${owner}/${cleanRepo}/git/refs`, {
+                method: 'POST',
+                headers: ghHeaders,
+                body: JSON.stringify({ ref: `refs/heads/${targetBranch}`, sha: newCommit.sha })
+            });
+        }
+
+        githubSyncTotal.inc({ action: 'push', status: 'success' });
+
+        return res.json({
+            success: true,
+            repoUrl: `https://github.com/${owner}/${cleanRepo}`,
+            commitSha: newCommit.sha,
+            branch: targetBranch,
+            message: `Successfully pushed ${treeItems.length} files to ${owner}/${cleanRepo} (${targetBranch})`
+        });
+    } catch (err) {
+        githubSyncTotal.inc({ action: 'push', status: 'error' });
+        return res.status(500).json({ message: err.message || 'GitHub push failed' });
+    }
+};
+
+exports.importFromGitHub = async (req, res) => {
+    try {
+        const { repoUrl, branch = 'main', token } = req.body;
+        if (!repoUrl || !repoUrl.trim()) {
+            return res.status(400).json({ message: 'GitHub repository URL or owner/repo is required' });
+        }
+
+        const project = await Project.findOne({ _id: req.params.id, owner: req.user._id });
+        if (!project) return res.status(404).json({ message: 'Project not found' });
+
+        let clean = repoUrl.trim().replace(/^https?:\/\/github\.com\//, '').replace(/\.git$/, '').replace(/\/$/, '');
+        const parts = clean.split('/');
+        if (parts.length < 2) {
+            return res.status(400).json({ message: 'Invalid repository format. Please use "owner/repo" or full GitHub URL.' });
+        }
+        const owner = parts[0];
+        const repo = parts[1];
+
+        const ghHeaders = {
+            'Accept': 'application/vnd.github+json',
+            'User-Agent': 'GenWeb-AI-Website-Builder',
+            'X-GitHub-Api-Version': '2022-11-28'
+        };
+        if (token && token.trim()) {
+            ghHeaders['Authorization'] = `Bearer ${token.trim()}`;
+        }
+
+        const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers: ghHeaders });
+        if (!repoRes.ok) {
+            const err = await repoRes.json().catch(() => ({}));
+            githubSyncTotal.inc({ action: 'import', status: 'repo_not_found' });
+            return res.status(repoRes.status).json({ message: err.message || 'GitHub repository not found or access denied.' });
+        }
+        const repoData = await repoRes.json();
+        const targetBranch = (branch || repoData.default_branch || 'main').trim();
+
+        const treeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees/${targetBranch}?recursive=1`, { headers: ghHeaders });
+        if (!treeRes.ok) {
+            const err = await treeRes.json().catch(() => ({}));
+            return res.status(treeRes.status).json({ message: `Branch "${targetBranch}" not found: ${err.message || ''}` });
+        }
+        const treeData = await treeRes.json();
+        if (!treeData.tree || treeData.tree.length === 0) {
+            return res.status(400).json({ message: 'Repository appears to be empty' });
+        }
+
+        const eligibleExtensions = ['.jsx', '.js', '.tsx', '.ts', '.html', '.css', '.json', '.svg', '.md', '.txt'];
+        const ignoredPatterns = ['node_modules/', 'dist/', '.git/', '.github/', 'package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', '.DS_Store'];
+
+        const filesToFetch = treeData.tree.filter(item => {
+            if (item.type !== 'blob') return false;
+            if (ignoredPatterns.some(p => item.path.includes(p))) return false;
+            return eligibleExtensions.some(ext => item.path.toLowerCase().endsWith(ext));
+        }).slice(0, 50);
+
+        if (filesToFetch.length === 0) {
+            return res.status(400).json({ message: 'No suitable web source files (HTML/JSX/CSS/JS) found in this repository.' });
+        }
+
+        const currentFiles = await ProjectFile.find({ project: project._id }).lean();
+        if (currentFiles.length > 0) {
+            await ProjectVersion.create({
+                project: project._id,
+                label: `Before GitHub import (${owner}/${repo})`,
+                snapshot: currentFiles.map(f => ({ path: f.path, content: f.content, language: f.language })),
+                triggeredBy: 'github_import'
+            });
+        }
+
+        const importedDocs = [];
+        let hasJsx = false;
+        let hasPackageJsonWithReact = false;
+
+        for (const item of filesToFetch) {
+            try {
+                const blobRes = await fetch(item.url, { headers: ghHeaders });
+                if (blobRes.ok) {
+                    const blobData = await blobRes.json();
+                    let content = '';
+                    if (blobData.encoding === 'base64') {
+                        content = Buffer.from(blobData.content, 'base64').toString('utf8');
+                    } else {
+                        content = blobData.content || '';
+                    }
+
+                    if (item.path.endsWith('.jsx')) hasJsx = true;
+                    if (item.path === 'package.json' && content.includes('"react"')) hasPackageJsonWithReact = true;
+
+                    importedDocs.push({
+                        project: project._id,
+                        path: item.path,
+                        content,
+                        language: detectLanguage(item.path),
+                        sizeBytes: Buffer.byteLength(content, 'utf8')
+                    });
+                }
+            } catch (blobErr) {
+                console.error(`Failed to fetch blob for ${item.path}:`, blobErr);
+            }
+        }
+
+        if (importedDocs.length === 0) {
+            return res.status(500).json({ message: 'Failed to retrieve file contents from GitHub' });
+        }
+
+        await ProjectFile.deleteMany({ project: project._id });
+        const fileOps = importedDocs.map(doc => ({
+            insertOne: { document: doc }
+        }));
+        await ProjectFile.bulkWrite(fileOps, { ordered: false });
+
+        project.framework = (hasJsx || hasPackageJsonWithReact) ? 'react' : 'html';
+        project.lastEditedAt = new Date();
+        await project.save();
+
+        githubSyncTotal.inc({ action: 'import', status: 'success' });
+
+        return res.json({
+            success: true,
+            repo: `${owner}/${repo}`,
+            branch: targetBranch,
+            framework: project.framework,
+            importedFilesCount: importedDocs.length,
+            files: importedDocs.map(d => ({ path: d.path, language: d.language }))
+        });
+    } catch (err) {
+        githubSyncTotal.inc({ action: 'import', status: 'error' });
+        return res.status(500).json({ message: err.message || 'GitHub import failed' });
+    }
 };
