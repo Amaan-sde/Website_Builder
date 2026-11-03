@@ -696,56 +696,64 @@ ol.references-list li {
 <h1 class="sec-heading">3. PROBLEM FORMULATION</h1>
 
 <h2 class="sub-heading">3.1 Need and Significance of Proposed Work</h2>
-<p>Modern AI-assisted web development tools have gained widespread adoption for rapid prototyping and automated code synthesis. However, an in-depth empirical investigation reveals critical technical and operational barriers that prevent existing platforms (such as Bolt.new, Lovable.dev, and Vercel v0) from functioning as reliable, production-ready engineering environments for students, independent developers, and engineering teams.</p>
-<p>Existing commercial platforms enforce expensive monthly subscription fees, impose restrictive daily token quotas, and lock generated projects within proprietary cloud hosting silos that prohibit direct export, containerisation, or self-hosted deployment. Furthermore, their conversational code generation workflows frequently fail when users attempt small, precision edits.</p>
+<p style="margin-bottom: 0.12cm;">Modern AI-assisted web development tools have gained widespread adoption for rapid prototyping and automated code synthesis. However, an empirical investigation reveals critical technical and operational barriers preventing existing platforms (such as Bolt.new, Lovable.dev, and Vercel v0) from functioning as reliable, production-ready engineering environments for students and engineering teams.</p>
+<p style="margin-bottom: 0.12cm;">Commercial platforms enforce recurring subscription fees ($20–$50/month), impose restrictive daily token quotas, and lock generated projects within proprietary cloud hosting silos that prohibit direct export, containerisation, or self-hosted deployment. Furthermore, their conversational workflows treat every minor styling tweak as an expensive, probabilistic text-generation task. There is an urgent need for an open-source, vendor-neutral platform pairing fast generative AI with deterministic visual precision and complete DevOps ownership.</p>
 
-<h2 class="sub-heading">3.2 Core Engineering Problems Identified</h2>
-<p>Specifically, this investigation formulates and addresses four foundational engineering deficiencies:</p>
-<ul class="bullet-list">
-  <li><strong>Problem 1 — Accidental Code Breakage and Token Waste (The Prompt Trap):</strong> In current conversational tools, modifying a minor visual attribute (such as padding, color, or element alignment) requires submitting a natural language prompt. Remote LLMs routinely rewrite entire component files to satisfy minor requests, frequently introducing syntax errors, erasing working business logic, and consuming costly AI tokens [2, 10].</li>
-  <li><strong>Problem 2 — In-Browser Runtime Memory Exhaustion:</strong> Commercial platforms rely on browser-based WebAssembly runtimes (e.g., WebContainers) to execute Node.js inside client tabs. This approach demands upwards of 2 GB to 4 GB of client RAM per tab, causing browser tab freezing, laptop overheating, and catastrophic crashes on standard consumer hardware.</li>
-  <li><strong>Problem 3 — Incomplete GitHub Synchronization and Repository Portability:</strong> Existing tools provide only partial or one-way code export. They lack bidirectional GitHub integration capable of authenticating developer accounts, cloning remote repositories, maintaining branch histories, and pushing verified commits back to origin, alongside clean ZIP downloads [7].</li>
-  <li><strong>Problem 4 — Absence of Production DevOps and Observability Infrastructure:</strong> Leading platforms terminate at ephemeral preview URLs. They completely omit multi-container Docker packaging [8], Nginx reverse proxy load balancing [4], and real-time observability telemetry (Prometheus and Grafana) [5, 6], leaving developers unable to deploy applications to production infrastructure.</li>
+<h2 class="sub-heading" style="margin-top: 0.22cm; margin-bottom: 0.06cm;">3.2 Core Engineering Problems Identified</h2>
+<p style="margin-bottom: 0.08cm;">Specifically, this investigation formulates and addresses five foundational engineering deficiencies present in contemporary AI web development solutions:</p>
+<ul class="bullet-list" style="margin-top: 0.04cm; margin-bottom: 0.12cm;">
+  <li><strong>Problem 1 — Accidental Code Breakage and Token Waste (The Prompt Trap):</strong> Modifying a minor visual attribute (padding, colors, alignment) via prompts forces remote LLMs to rewrite entire component files, frequently introducing syntax errors, corrupting React state logic, and consuming costly AI tokens [2, 10].</li>
+  <li><strong>Problem 2 — In-Browser Runtime Memory Exhaustion:</strong> Using client-side WebAssembly runtimes (e.g., WebContainers) to execute Node.js inside browser tabs consumes 2 GB to 4 GB of client RAM, causing severe tab freezing, thermal throttling, and catastrophic crashes on standard consumer laptops.</li>
+  <li><strong>Problem 3 — Incomplete GitHub Synchronization and Repository Portability:</strong> Commercial builders lack bidirectional GitHub integration capable of authenticating users, managing branch lifecycles, and pushing commits back to origin, leaving code locked without clean offline ZIP archives [7].</li>
+  <li><strong>Problem 4 — Absence of Production DevOps and Observability Infrastructure:</strong> Existing platforms terminate at ephemeral preview URLs, omitting multi-stage Docker containerisation [8], Nginx layer-7 load balancing [4], and Prometheus/Grafana operational monitoring [5, 6].</li>
+  <li><strong>Problem 5 — Single-Point-of-Failure Vulnerability during API Outages:</strong> Total reliance on external LLM APIs leaves developers vulnerable to upstream rate limits and outages. Current platforms lack offline deterministic template fallbacks to sustain uninterrupted web synthesis during network downtime.</li>
 </ul>
 
-<h2 class="sub-heading">3.3 Target Audience, Scope, and Engineering Significance</h2>
-<p>Resolving these formulated problems through Code2Cloud provides computer science students, open-source developers, and engineering institutions with an accessible, vendor-neutral web engineering platform that unites generative AI speed with absolute developer control and production deployment capabilities.</p>
+<h2 class="sub-heading" style="margin-top: 0.22cm; margin-bottom: 0.06cm;">3.3 Technical Scope, Target Audience, and Research Contributions</h2>
+<p style="margin-bottom: 0.12cm;">Code2Cloud addresses these formulated challenges through a modular, self-contained architecture spanning React 19 workspaces, Server-Sent Events gateways, Google Gemini synthesis pipelines, and Alpine Docker microservices. The target beneficiaries encompass undergraduate computer science students developing capstone projects, academic laboratories, hackathon participants, and developers requiring an unconstrained, zero-lock-in platform.</p>
+<p style="margin-bottom: 0;">The primary research contributions include: (i) introducing a zero-token visual DOM inspection protocol eliminating conversational regression loops; (ii) engineering a lightweight server-side container deployment model that eliminates client WebAssembly memory exhaustion; and (iii) delivering a fully observable, enterprise-ready microservices stack with automated Prometheus and Grafana metrics collection.</p>
 </div>
 
 <!-- PAGE 8: 4. OBJECTIVES (STANDALONE) -->
 <div class="page">
 <h1 class="sec-heading">4. OBJECTIVES</h1>
-<p class="no-indent">To effectively resolve the formulated problems, the proposed project defines the following five concrete, measurable, and action-verb-led engineering objectives:</p>
+<p class="no-indent">To systematically resolve the formulated engineering problems, the proposed project defines six concrete, measurable, and action-verb-led engineering objectives structured across the system lifecycle:</p>
 
-<div style="margin-top: 0.35cm;">
-  <div style="margin-bottom: 0.4cm;">
-    <p style="margin-bottom: 0.08cm;"><strong>Objective 1: Design and Implement Autonomous AI Code Synthesis Engine</strong></p>
-    <p style="font-size: 10pt; line-height: 1.45; margin-bottom: 0.06cm;">To engineer a multi-file code synthesis engine using the Google Gemini API [2] with Server-Sent Events (SSE) streaming for sub-second code generation. The engine incorporates an intelligent offline template fallback mechanism ensuring 100% website generation uptime even during external API downtime.</p>
-    <p style="font-size: 9.5pt; color: #222; margin-bottom: 0;"><em>Deliverable & Metric:</em> Complete Vite/React project synthesis under 15 seconds; deterministic fallback activation within 500 ms upon API failure.</p>
+<div style="margin-top: 0.25cm;">
+  <div style="margin-bottom: 0.32cm;">
+    <p style="margin-bottom: 0.05cm;"><strong>Objective 1: Design and Implement Autonomous AI Code Synthesis Engine</strong></p>
+    <p style="font-size: 9.8pt; line-height: 1.42; margin-bottom: 0.04cm;">To engineer a multi-file full-stack code synthesis engine powered by the Google Gemini API [2] with Server-Sent Events (SSE) streaming for sub-second code generation. The engine incorporates an intelligent offline template fallback mechanism ensuring 100% website generation uptime even during external API downtime.</p>
+    <p style="font-size: 9.2pt; color: #1e293b; margin-bottom: 0;"><em>Deliverable & Metric:</em> Complete Vite/React project synthesis under 15 seconds; deterministic fallback activation within 500 ms upon API failure.</p>
   </div>
 
-  <div style="margin-bottom: 0.4cm;">
-    <p style="margin-bottom: 0.08cm;"><strong>Objective 2: Develop Dual-Mode Hybrid Workspace with Visual DOM Inspector</strong></p>
-    <p style="font-size: 10pt; line-height: 1.45; margin-bottom: 0.06cm;">To build an interactive developer workspace pairing a high-performance Monaco code editor with an in-place Visual DOM Inspector [10]. This enables developers to point, click, and visually tweak styles (margins, colors, layout) inside the live preview, synchronizing changes directly to the source code.</p>
-    <p style="font-size: 9.5pt; color: #222; margin-bottom: 0;"><em>Deliverable & Metric:</em> Zero AI token expenditure for visual layout edits; bi-directional state synchronization between Monaco editor and preview iframe in under 50 ms.</p>
+  <div style="margin-bottom: 0.32cm;">
+    <p style="margin-bottom: 0.05cm;"><strong>Objective 2: Develop Dual-Mode Hybrid Workspace with Visual DOM Inspector</strong></p>
+    <p style="font-size: 9.8pt; line-height: 1.42; margin-bottom: 0.04cm;">To build an interactive developer workspace pairing a high-performance Monaco code editor with an in-place Visual DOM Inspector [10]. Using a bidirectional postMessage protocol, developers can click and visually tweak styles (margins, colors, layout) inside the live preview, synchronizing changes directly to the source code.</p>
+    <p style="font-size: 9.2pt; color: #1e293b; margin-bottom: 0;"><em>Deliverable & Metric:</em> Zero AI token expenditure for visual layout edits; bidirectional state synchronization between Monaco editor and preview iframe in under 50 ms.</p>
   </div>
 
-  <div style="margin-bottom: 0.4cm;">
-    <p style="margin-bottom: 0.08cm;"><strong>Objective 3: Integrate Bidirectional GitHub Version Control & Portable Export</strong></p>
-    <p style="font-size: 10pt; line-height: 1.45; margin-bottom: 0.06cm;">To incorporate full Git lifecycle automation via GitHub REST APIs [7], allowing users to authenticate via OAuth/PAT, clone existing repositories, create development branches, and push commits directly from the browser, supplemented by clean offline ZIP export.</p>
-    <p style="font-size: 9.5pt; color: #222; margin-bottom: 0;"><em>Deliverable & Metric:</em> One-click bidirectional repository synchronization, branch creation, automated commit generation, and verified zero-dependency standalone ZIP archives.</p>
+  <div style="margin-bottom: 0.32cm;">
+    <p style="margin-bottom: 0.05cm;"><strong>Objective 3: Integrate Bidirectional GitHub Version Control & Portable Export</strong></p>
+    <p style="font-size: 9.8pt; line-height: 1.42; margin-bottom: 0.04cm;">To incorporate full Git lifecycle automation via GitHub REST APIs [7], allowing users to authenticate via OAuth/PAT, clone existing repositories, create development branches, and push commits directly from the browser, supplemented by clean offline ZIP export.</p>
+    <p style="font-size: 9.2pt; color: #1e293b; margin-bottom: 0;"><em>Deliverable & Metric:</em> One-click bidirectional repository synchronization, branch creation, automated commit generation, and verified zero-dependency standalone ZIP archives.</p>
   </div>
 
-  <div style="margin-bottom: 0.4cm;">
-    <p style="margin-bottom: 0.08cm;"><strong>Objective 4: Architect Containerised Microservices Stack with Load Balancing</strong></p>
-    <p style="font-size: 10pt; line-height: 1.45; margin-bottom: 0.06cm;">To package client, server, and database components into multi-stage Alpine Docker containers [8] orchestrated by Docker Compose, fronted by an Nginx reverse proxy [4] configured for layer-7 load balancing, SSL termination, and static asset caching.</p>
-    <p style="font-size: 9.5pt; color: #222; margin-bottom: 0;"><em>Deliverable & Metric:</em> Container image footprint under 150 MB; round-robin traffic distribution across replicated backend services with automatic failover.</p>
+  <div style="margin-bottom: 0.32cm;">
+    <p style="margin-bottom: 0.05cm;"><strong>Objective 4: Architect Containerised Microservices Stack with Load Balancing</strong></p>
+    <p style="font-size: 9.8pt; line-height: 1.42; margin-bottom: 0.04cm;">To package client, server, and database components into multi-stage Alpine Docker containers [8] orchestrated by Docker Compose, fronted by an Nginx reverse proxy [4] configured for layer-7 round-robin load balancing, SSL termination, and static asset caching.</p>
+    <p style="font-size: 9.2pt; color: #1e293b; margin-bottom: 0;"><em>Deliverable & Metric:</em> Container image footprint under 150 MB; round-robin traffic distribution across replicated backend services with automatic failover.</p>
   </div>
 
-  <div style="margin-bottom: 0.4cm;">
-    <p style="margin-bottom: 0.08cm;"><strong>Objective 5: Deploy Real-Time Telemetry and Observability Infrastructure</strong></p>
-    <p style="font-size: 10pt; line-height: 1.45; margin-bottom: 0.06cm;">To instrument the application with Prometheus [5] scraping real-time metrics (HTTP request rate, response latency, CPU and memory utilization) via a dedicated <code>/metrics</code> endpoint, visualized on live Grafana [6] operational dashboards.</p>
-    <p style="font-size: 9.5pt; color: #222; margin-bottom: 0;"><em>Deliverable & Metric:</em> Real-time visual monitoring dashboards displaying cluster health, error rates, and request throughput with sub-second scraping intervals.</p>
+  <div style="margin-bottom: 0.32cm;">
+    <p style="margin-bottom: 0.05cm;"><strong>Objective 5: Deploy Real-Time Telemetry and Observability Infrastructure</strong></p>
+    <p style="font-size: 9.8pt; line-height: 1.42; margin-bottom: 0.04cm;">To instrument the application with Prometheus [5] scraping real-time metrics (HTTP request rate, response latency, CPU and memory utilization) via a dedicated <code>/metrics</code> endpoint, visualized on live Grafana [6] operational dashboards.</p>
+    <p style="font-size: 9.2pt; color: #1e293b; margin-bottom: 0;"><em>Deliverable & Metric:</em> Real-time visual monitoring dashboards displaying cluster health, error rates, and request throughput with sub-second scraping intervals.</p>
+  </div>
+
+  <div style="margin-bottom: 0.25cm;">
+    <p style="margin-bottom: 0.05cm;"><strong>Objective 6: Conduct Empirical Performance Benchmarking & Usability Validation</strong></p>
+    <p style="font-size: 9.8pt; line-height: 1.42; margin-bottom: 0.04cm;">To validate system efficacy through empirical testing across 50 benchmark prompt scenarios, comparing Code2Cloud against commercial tools (Bolt.new, Lovable) on client memory consumption, build latency, and developer control precision.</p>
+    <p style="font-size: 9.2pt; color: #1e293b; margin-bottom: 0;"><em>Deliverable & Metric:</em> Documented ≥70% reduction in client RAM usage compared to WebContainers, 100% token savings on visual edits, and zero vendor lock-in.</p>
   </div>
 </div>
 </div>
