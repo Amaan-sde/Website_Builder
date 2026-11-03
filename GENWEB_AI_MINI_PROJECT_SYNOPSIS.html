@@ -66,9 +66,7 @@ h1.sec-heading {
   font-size: 13.5pt;
   font-weight: bold;
   margin-top: 0;
-  margin-bottom: 0.18cm;
-  border-bottom: 1.5px solid #000;
-  padding-bottom: 2px;
+  margin-bottom: 0.22cm;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
@@ -755,12 +753,85 @@ ol.references-list li {
   <li><strong>Dependent Variables:</strong> Generation speed (time to first token and total build time), token usage for visual edits (zero tokens with inspector), code execution success rate, and server response latency.</li>
   <li><strong>Controlled Baseline:</strong> The platform's performance is benchmarked against commercial tools (Bolt.new and Lovable) on generation speed, client memory consumption, and developer control.</li>
 </ul>
+
+<div style="text-align: center; margin: 0.35cm 0 0.1cm 0;">
+  <svg width="650" height="135" viewBox="0 0 680 135" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff; border:1px solid #ccc; border-radius:4px; max-width: 100%;">
+    <defs>
+      <marker id="m-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e293b" />
+      </marker>
+    </defs>
+
+    <!-- Phase 1 -->
+    <rect x="10" y="12" width="118" height="110" rx="5" fill="#f8fafc" stroke="#3b82f6" stroke-width="1.5" />
+    <rect x="10" y="12" width="118" height="24" rx="5" fill="#dbeafe" />
+    <text x="69" y="28" font-family="Times New Roman" font-size="10" font-weight="bold" text-anchor="middle" fill="#1e40af">PHASE 1: DESIGN</text>
+    <text x="69" y="50" font-family="Times New Roman" font-size="9" font-weight="bold" text-anchor="middle" fill="#0f172a">Architecture Spec</text>
+    <text x="69" y="66" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• 50 Benchmark Prompts</text>
+    <text x="69" y="80" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• React / Vite Setup</text>
+    <text x="69" y="94" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• MongoDB Schemas</text>
+    <text x="69" y="108" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• JWT Auth Gateway</text>
+
+    <!-- Arrow 1 -> 2 -->
+    <line x1="128" y1="67" x2="144" y2="67" stroke="#1e293b" stroke-width="1.5" marker-end="url(#m-arrow)" />
+
+    <!-- Phase 2 -->
+    <rect x="146" y="12" width="118" height="110" rx="5" fill="#f8fafc" stroke="#3b82f6" stroke-width="1.5" />
+    <rect x="146" y="12" width="118" height="24" rx="5" fill="#dbeafe" />
+    <text x="205" y="28" font-family="Times New Roman" font-size="10" font-weight="bold" text-anchor="middle" fill="#1e40af">PHASE 2: AI ENGINE</text>
+    <text x="205" y="50" font-family="Times New Roman" font-size="9" font-weight="bold" text-anchor="middle" fill="#0f172a">Synthesis Pipeline</text>
+    <text x="205" y="66" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• Gemini Flash/Pro API</text>
+    <text x="205" y="80" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• SSE Token Streaming</text>
+    <text x="205" y="94" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• Multi-File Monaco IDE</text>
+    <text x="205" y="108" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• Offline Fallback Scaffold</text>
+
+    <!-- Arrow 2 -> 3 -->
+    <line x1="264" y1="67" x2="280" y2="67" stroke="#1e293b" stroke-width="1.5" marker-end="url(#m-arrow)" />
+
+    <!-- Phase 3 -->
+    <rect x="282" y="12" width="118" height="110" rx="5" fill="#f8fafc" stroke="#3b82f6" stroke-width="1.5" />
+    <rect x="282" y="12" width="118" height="24" rx="5" fill="#dbeafe" />
+    <text x="341" y="28" font-family="Times New Roman" font-size="10" font-weight="bold" text-anchor="middle" fill="#1e40af">PHASE 3: DOM TOOL</text>
+    <text x="341" y="50" font-family="Times New Roman" font-size="9" font-weight="bold" text-anchor="middle" fill="#0f172a">Visual Inspector</text>
+    <text x="341" y="66" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• iframe postMessage</text>
+    <text x="341" y="80" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• In-Place Visual Toolbar</text>
+    <text x="341" y="94" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• Zero AI Token Tweaks</text>
+    <text x="341" y="108" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• Code-State Live Sync</text>
+
+    <!-- Arrow 3 -> 4 -->
+    <line x1="400" y1="67" x2="416" y2="67" stroke="#1e293b" stroke-width="1.5" marker-end="url(#m-arrow)" />
+
+    <!-- Phase 4 -->
+    <rect x="418" y="12" width="118" height="110" rx="5" fill="#f8fafc" stroke="#3b82f6" stroke-width="1.5" />
+    <rect x="418" y="12" width="118" height="24" rx="5" fill="#dbeafe" />
+    <text x="477" y="28" font-family="Times New Roman" font-size="10" font-weight="bold" text-anchor="middle" fill="#1e40af">PHASE 4: DEVOPS</text>
+    <text x="477" y="50" font-family="Times New Roman" font-size="9" font-weight="bold" text-anchor="middle" fill="#0f172a">Git & Container Stack</text>
+    <text x="477" y="66" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• GitHub REST API Sync</text>
+    <text x="477" y="80" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• One-Click ZIP Export</text>
+    <text x="477" y="94" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• Alpine Multi-Stage Docker</text>
+    <text x="477" y="108" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• Nginx Load Balancer</text>
+
+    <!-- Arrow 4 -> 5 -->
+    <line x1="536" y1="67" x2="552" y2="67" stroke="#1e293b" stroke-width="1.5" marker-end="url(#m-arrow)" />
+
+    <!-- Phase 5 -->
+    <rect x="554" y="12" width="118" height="110" rx="5" fill="#f8fafc" stroke="#3b82f6" stroke-width="1.5" />
+    <rect x="554" y="12" width="118" height="24" rx="5" fill="#dbeafe" />
+    <text x="613" y="28" font-family="Times New Roman" font-size="10" font-weight="bold" text-anchor="middle" fill="#1e40af">PHASE 5: EVAL</text>
+    <text x="613" y="50" font-family="Times New Roman" font-size="9" font-weight="bold" text-anchor="middle" fill="#0f172a">Telemetry & Testing</text>
+    <text x="613" y="66" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• Prometheus /metrics</text>
+    <text x="613" y="80" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• Grafana Dashboards</text>
+    <text x="613" y="94" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• Benchmarking vs Bolt</text>
+    <text x="613" y="108" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#475569">• Final Project Defense</text>
+  </svg>
+  <div class="figure-caption" style="margin-top: 0.12cm; margin-bottom: 0;">Figure 2: Methodological Planning, Execution Workflow, and Phased Experimental Stages of Code2Cloud</div>
+</div>
 </div>
 
 <!-- PAGE 10: 5.5 DEVOPS & 6. ACTIVITY CHART -->
 <div class="page">
 <h2 class="sub-heading">5.5 DevOps Infrastructure: Containerisation, Load Balancing & Observability</h2>
-<p style="text-indent: 0;">To meet modern cloud deployment standards, the complete application stack is containerised with Docker [8], load balanced using Nginx [4], and monitored using Prometheus [5] and Grafana [6], as illustrated in Figure 2:</p>
+<p style="text-indent: 0;">To meet modern cloud deployment standards, the complete application stack is containerised with Docker [8], load balanced using Nginx [4], and monitored using Prometheus [5] and Grafana [6], as illustrated in Figure 3:</p>
 
 <div style="text-align: center; margin: 0.05cm 0;">
   <svg width="600" height="185" viewBox="0 0 700 230" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff; border:1px solid #ccc; border-radius:4px; max-width: 100%;">
@@ -819,7 +890,7 @@ ol.references-list li {
     <text x="622" y="150" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#64748b">Dashboards & Alerts</text>
     <text x="622" y="161" font-family="Times New Roman" font-size="8" text-anchor="middle" fill="#64748b">Live Health Telemetry</text>
   </svg>
-  <div class="figure-caption">Figure 2: DevOps Microservices Architecture with Nginx Load Balancing and Observability Stack for Code2Cloud</div>
+  <div class="figure-caption">Figure 3: DevOps Microservices Architecture with Nginx Load Balancing and Observability Stack for Code2Cloud</div>
 </div>
 
 <h1 class="sec-heading">6. ACTIVITY CHART (SEMESTER WORK PLAN)</h1>
