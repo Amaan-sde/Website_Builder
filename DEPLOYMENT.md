@@ -1,6 +1,6 @@
-# 🚀 GenWeb AI - Production Deployment & DevOps Architecture Guide
+# 🚀 Code2Cloud AI - Production Deployment & DevOps Architecture Guide
 
-This document describes the high-availability production deployment topology, load balancing, real-time telemetry, and GitHub integration architecture for the **GenWeb AI Website Builder** college minor project.
+This document describes the high-availability production deployment topology, load balancing, real-time telemetry, and GitHub integration architecture for the **Code2Cloud AI Website Builder** college minor project.
 
 ---
 
@@ -90,7 +90,7 @@ docker compose -f docker-compose.prod.yml ps
 - **Default Credentials**:
   - Username: `admin`
   - Password: `admin`
-- The pre-provisioned dashboard **"GenWeb AI - Production Cluster Telemetry"** is immediately visible under Dashboards.
+- The pre-provisioned dashboard **"Code2Cloud AI - Production Cluster Telemetry"** is immediately visible under Dashboards.
 
 ---
 
@@ -128,7 +128,7 @@ docker compose -f docker-compose.prod.yml ps
 
 ## 🧑‍💻 Project Academic Information
 - **Institution**: Birla Institute of Applied Sciences (BIAS), Bhimtal
-- **Project Title**: GenWeb AI - Next-Generation AI Website Builder & Visual Editor
+- **Project Title**: Code2Cloud AI - Next-Generation AI Website Builder & Visual Editor
 - **Mentor**: Mr. Hem Bhatt, Assistant Professor, Dept. of CSE
 - **Team**:
   1. Lakshita Pandey (Leader, Roll: 230050101095)

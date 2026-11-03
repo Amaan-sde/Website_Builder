@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
 <meta charset="UTF-8">
-<title>Mini Project Synopsis - GenWeb.ai - BIAS Bhimtal</title>
+<title>Mini Project Synopsis - Code2Cloud - BIAS Bhimtal</title>
 <style>
 @page {
   size: A4 portrait;
@@ -272,7 +272,7 @@ ol.references-list li {
 <div class="page">
 <div class="title-page-container">
   <div>
-    <div class="title-main">GENWEB.AI: AN AUTONOMOUS FULL-STACK WEB APPLICATION SYNTHESIS PLATFORM WITH HYBRID VISUAL-CODE ORCHESTRATION AND PRODUCTION DEVOPS PIPELINES</div>
+    <div class="title-main">CODE2CLOUD: AN AUTONOMOUS FULL-STACK WEB APPLICATION SYNTHESIS PLATFORM WITH HYBRID VISUAL-CODE ORCHESTRATION AND PRODUCTION DEVOPS PIPELINES</div>
     <div class="synopsis-head">PROJECT SYNOPSIS</div>
     <div class="mini-proj">OF MINI PROJECT</div>
     <div class="partial-fulfill">submitted in partial fulfilment of the requirements for the award of the degree of</div>
@@ -326,9 +326,9 @@ ol.references-list li {
 <h1 class="sec-heading">ABSTRACT</h1>
 <div class="abstract-box">
   <p><strong>Motivation / Problem Statement:</strong> Recent breakthroughs in generative artificial intelligence have transformed software engineering. However, popular commercial platforms like Bolt.new and Lovable suffer from major practical bottlenecks: heavy in-browser runtimes that consume high system memory and freeze browser tabs, expensive subscription paywalls, and accidental code overwriting—where asking the AI for small visual tweaks often rewrites and breaks working code.</p>
-  <p><strong>Methods / Approach:</strong> This project presents <em>GenWeb.ai</em>, an autonomous, production-ready full-stack web application builder. GenWeb.ai pairs modern Large Language Models (Google Gemini) with a hybrid dual-mode workspace: a real-time streaming Monaco code editor and an in-place visual DOM inspector that lets users click and style elements directly without making repeated AI prompts. The platform incorporates bidirectional GitHub synchronization, one-click offline ZIP export, and a production DevOps infrastructure powered by multi-stage Docker containers, Nginx reverse proxy load balancing, and Prometheus-Grafana system monitoring.</p>
+  <p><strong>Methods / Approach:</strong> This project presents <em>Code2Cloud</em>, an autonomous, production-ready full-stack web application builder. Code2Cloud pairs modern Large Language Models (Google Gemini) with a hybrid dual-mode workspace: a real-time streaming Monaco code editor and an in-place visual DOM inspector that lets users click and style elements directly without making repeated AI prompts. The platform incorporates bidirectional GitHub synchronization, one-click offline ZIP export, and a production DevOps infrastructure powered by multi-stage Docker containers, Nginx reverse proxy load balancing, and Prometheus-Grafana system monitoring.</p>
   <p><strong>Results / Findings:</strong> The developed platform delivers instant live preview rendering, zero token cost for visual styling adjustments, offline fallback templates ensuring 100% generation uptime, and automated multi-container deployment capable of handling concurrent requests smoothly.</p>
-  <p><strong>Conclusion / Implications:</strong> GenWeb.ai connects fast AI generation with reliable full-stack engineering, providing an accessible, vendor-neutral, and transparent web development platform for students, developers, and institutions.</p>
+  <p><strong>Conclusion / Implications:</strong> Code2Cloud connects fast AI generation with reliable full-stack engineering, providing an accessible, vendor-neutral, and transparent web development platform for students, developers, and institutions.</p>
   <p class="keywords">Keywords: Autonomous Web Synthesis, Large Language Models, Visual DOM Inspector, Monaco Code Editor, Docker Containers, Nginx Load Balancing, Observability.</p>
 </div>
 </div>
@@ -338,13 +338,13 @@ ol.references-list li {
 <h1 class="sec-heading">1. INTRODUCTION</h1>
 <p>Modern software development is evolving rapidly through the power of artificial intelligence. Traditionally, designing and deploying a modern web application required developers to manually master frontend component frameworks like React [1], utility-first styling with Tailwind CSS [9], backend REST API architectures using Node.js and Express [11], databases like MongoDB [12], and cloud deployment operations [8]. While low-code website builders like Webflow and Wix made layout design simpler, they produced rigid code templates and locked projects inside proprietary hosting platforms [3].</p>
 <p>Recently, generative AI web development environments—such as Bolt.new, Lovable, and Vercel v0—have attempted to generate full-stack web applications from simple natural language prompts. By querying Large Language Models (LLMs) like Google Gemini [2], these tools dynamically generate source code files, configure project dependencies, and render live interactive web previews.</p>
-<p>However, practical usage reveals severe limitations in existing commercial offerings. Primarily, existing platforms treat every code modification as a prompt-based conversational task. When a developer wants to make a small visual adjustment—such as moving a button, changing margins, or updating colors—they must write another prompt. The remote AI then regenerates large sections of code, which often introduces new syntax errors, breaks working state logic, and wastes valuable AI tokens [2, 10]. GenWeb.ai directly solves this limitation by introducing a hybrid visual-code workflow with full DevOps support.</p>
+<p>However, practical usage reveals severe limitations in existing commercial offerings. Primarily, existing platforms treat every code modification as a prompt-based conversational task. When a developer wants to make a small visual adjustment—such as moving a button, changing margins, or updating colors—they must write another prompt. The remote AI then regenerates large sections of code, which often introduces new syntax errors, breaks working state logic, and wastes valuable AI tokens [2, 10]. Code2Cloud directly solves this limitation by introducing a hybrid visual-code workflow with full DevOps support.</p>
 </div>
 
 <!-- PAGE 4: 1.1 ARCHITECTURAL PARADIGM & FIGURE 1 -->
 <div class="page">
-<h2 class="sub-heading">1.1 Architectural Paradigm and Core Innovations of GenWeb.ai</h2>
-<p style="text-indent: 0;">To bridge the gap between fast AI code generation and complete manual developer control, GenWeb.ai is built on a five-tier modular architecture:</p>
+<h2 class="sub-heading">1.1 Architectural Paradigm and Core Innovations of Code2Cloud</h2>
+<p style="text-indent: 0;">To bridge the gap between fast AI code generation and complete manual developer control, Code2Cloud is built on a five-tier modular architecture:</p>
 <ul class="bullet-list">
   <li><strong>Client Presentation & Hybrid Workspace:</strong> Built using React 19 [1] and Tailwind CSS [9], featuring a Monaco code editor, an isolated preview iframe [10], and an in-place visual DOM inspector for direct UI styling.</li>
   <li><strong>Backend API & Streaming Gateway:</strong> An Express.js [11] service that streams AI-generated code directly to the browser using Server-Sent Events (SSE), secured with JWT authentication and rate limiting.</li>
@@ -422,7 +422,7 @@ ol.references-list li {
     <text x="592" y="288" font-family="Times New Roman" font-size="10.5" font-weight="bold" text-anchor="middle">Nginx & Monitoring</text>
     <text x="592" y="304" font-family="Times New Roman" font-size="9" text-anchor="middle" fill="#475569">Load Balancer / Grafana</text>
   </svg>
-  <div class="figure-caption">Figure 1: High-Level System Architecture and Orchestration Pipeline of GenWeb.ai</div>
+  <div class="figure-caption">Figure 1: High-Level System Architecture and Orchestration Pipeline of Code2Cloud</div>
 </div>
 </div>
 
@@ -448,7 +448,7 @@ ol.references-list li {
 
 <!-- PAGE 6: TABLE 1 & 2.4 GAPS -->
 <div class="page">
-<div class="table-caption">Table 1: Comparative Evaluation of Leading AI Web Synthesis Platforms vs GenWeb.ai</div>
+<div class="table-caption">Table 1: Comparative Evaluation of Leading AI Web Synthesis Platforms vs Code2Cloud</div>
 <table class="data-table">
   <thead>
     <tr>
@@ -456,7 +456,7 @@ ol.references-list li {
       <th style="width: 19%;">Bolt.new</th>
       <th style="width: 19%;">Lovable.dev</th>
       <th style="width: 18%;">Vercel v0</th>
-      <th style="width: 22%; background-color: #e2e8f0;">GenWeb.ai (Proposed)</th>
+      <th style="width: 22%; background-color: #e2e8f0;">Code2Cloud (Proposed)</th>
     </tr>
   </thead>
   <tbody>
