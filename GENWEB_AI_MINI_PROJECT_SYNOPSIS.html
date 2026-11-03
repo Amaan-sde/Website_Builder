@@ -447,28 +447,30 @@ ol.references-list li {
 </div>
 </div>
 
-<!-- PAGE 3: 1. INTRODUCTION -->
+<!-- PAGE 3: 1. INTRODUCTION & 1.1 ARCHITECTURAL PARADIGM -->
 <div class="page">
 <h1 class="sec-heading">1. INTRODUCTION</h1>
 <p>Modern software development is evolving rapidly through the power of artificial intelligence. Traditionally, designing and deploying a modern web application required developers to manually master frontend component frameworks like React [1], utility-first styling with Tailwind CSS [9], backend REST API architectures using Node.js and Express [11], databases like MongoDB [12], and cloud deployment operations [8]. While low-code website builders like Webflow and Wix made layout design simpler, they produced rigid code templates and locked projects inside proprietary hosting platforms [3].</p>
 <p>Recently, generative AI web development environments—such as Bolt.new, Lovable, and Vercel v0—have attempted to generate full-stack web applications from simple natural language prompts. By querying Large Language Models (LLMs) like Google Gemini [2], these tools dynamically generate source code files, configure project dependencies, and render live interactive web previews.</p>
 <p>However, practical usage reveals severe limitations in existing commercial offerings. Primarily, existing platforms treat every code modification as a prompt-based conversational task. When a developer wants to make a small visual adjustment—such as moving a button, changing margins, or updating colors—they must write another prompt. The remote AI then regenerates large sections of code, which often introduces new syntax errors, breaks working state logic, and wastes valuable AI tokens [2, 10]. Code2Cloud directly solves this limitation by introducing a hybrid visual-code workflow with full DevOps support.</p>
-</div>
 
-<!-- PAGE 4: 1.1 ARCHITECTURAL PARADIGM & FIGURE 1 -->
-<div class="page">
-<h2 class="sub-heading">1.1 Architectural Paradigm and Core Innovations of Code2Cloud</h2>
-<p style="text-indent: 0;">To bridge the gap between fast AI code generation and complete manual developer control, Code2Cloud is built on a five-tier modular architecture:</p>
-<ul class="bullet-list">
+<h2 class="sub-heading" style="margin-top: 0.35cm;">1.1 Architectural Paradigm and Core Innovations of Code2Cloud</h2>
+<p style="text-indent: 0; margin-bottom: 0.16cm;">To bridge the gap between fast AI code generation and complete manual developer control, Code2Cloud is built on a five-tier modular architecture:</p>
+<ul class="bullet-list" style="margin-top: 0.08cm; margin-bottom: 0;">
   <li><strong>Client Presentation & Hybrid Workspace:</strong> Built using React 19 [1] and Tailwind CSS [9], featuring a Monaco code editor, an isolated preview iframe [10], and an in-place visual DOM inspector for direct UI styling.</li>
   <li><strong>Backend API & Streaming Gateway:</strong> An Express.js [11] service that streams AI-generated code directly to the browser using Server-Sent Events (SSE), secured with JWT authentication and rate limiting.</li>
   <li><strong>Multi-Engine Synthesis Pipeline:</strong> Combines Google Gemini API [2] with smart offline fallback templates to ensure 100% website generation uptime even during API outages.</li>
   <li><strong>Bidirectional GitHub & ZIP Export:</strong> Uses GitHub REST APIs [7] for importing repositories, creating branches, committing changes, and pushing code directly to GitHub, alongside one-click ZIP download.</li>
   <li><strong>Enterprise DevOps & Observability:</strong> Uses multi-stage Alpine Docker containers [8], an Nginx layer-7 reverse proxy for load balancing [4], and Prometheus with Grafana for live telemetry and monitoring [5, 6].</li>
 </ul>
+</div>
 
-<div style="text-align: center; margin: 0.12cm 0;">
-  <svg width="600" height="300" viewBox="0 0 700 350" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff; border:1px solid #ccc; border-radius:4px; max-width: 100%;">
+<!-- PAGE 4: FIGURE 1 ARCHITECTURE DIAGRAM & DETAILED PIPELINE SPECIFICATION -->
+<div class="page">
+<h2 class="sub-heading" style="text-align: center; margin-top: 0; margin-bottom: 0.35cm;">Figure 1: High-Level System Architecture and Orchestration Pipeline of Code2Cloud</h2>
+
+<div style="text-align: center; margin: 0.2cm 0 0.35cm 0;">
+  <svg width="640" height="340" viewBox="0 0 700 350" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff; border:1px solid #ccc; border-radius:4px; max-width: 100%;">
     <defs>
       <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
         <path d="M 0 1 L 10 5 L 0 9 z" fill="#333" />
@@ -536,8 +538,16 @@ ol.references-list li {
     <text x="592" y="288" font-family="Times New Roman" font-size="10.5" font-weight="bold" text-anchor="middle">Nginx & Monitoring</text>
     <text x="592" y="304" font-family="Times New Roman" font-size="9.5" text-anchor="middle" fill="#475569">Load Balancer / Grafana</text>
   </svg>
-  <div class="figure-caption">Figure 1: High-Level System Architecture and Orchestration Pipeline of Code2Cloud</div>
+  <div class="figure-caption" style="margin-top: 0.2cm;">Figure 1: High-Level System Architecture and Orchestration Pipeline of Code2Cloud</div>
 </div>
+
+<p style="text-indent: 0; margin-top: 0.35cm;">As shown in Figure 1, Code2Cloud integrates three decoupled, cohesive subsystems to achieve rapid code generation alongside absolute developer precision:</p>
+
+<ul class="bullet-list" style="margin-top: 0.15cm;">
+  <li><strong>User Client Layer:</strong> Houses the interactive developer interface, combining the Monaco code IDE, live sandboxed preview, and the in-place Visual DOM Inspector for zero-token styling tweaks [10].</li>
+  <li><strong>API & Orchestration Layer:</strong> An Express.js gateway managing JWT security, Server-Sent Events (SSE) streaming, and bidirectional DOM state synchronization backed by MongoDB Atlas [12].</li>
+  <li><strong>Synthesis & DevOps Layer:</strong> Combines Google Gemini LLM synthesis [2] with smart offline fallback scaffolds, GitHub REST API version control [7], and an Alpine Docker microservice cluster monitored via Prometheus and Grafana [5, 6].</li>
+</ul>
 </div>
 
 <!-- PAGE 5: 2. LITERATURE SURVEY -->
@@ -646,31 +656,66 @@ ol.references-list li {
 <p><strong>Gap 2: Missing Production DevOps and Deployment Infrastructure.</strong> Commercial AI builders stop at temporary browser previews. However, real-world deployment requires production-ready Docker containers [8], reverse proxying with load balancing [4], and server monitoring with metrics [5, 6]. Existing platforms deliberately omit these deployment tools to force users into expensive proprietary hosting plans.</p>
 </div>
 
-<!-- PAGE 7: 3. PROBLEM FORMULATION & 4. OBJECTIVES -->
+<!-- PAGE 7: 3. PROBLEM FORMULATION (STANDALONE) -->
 <div class="page">
 <h1 class="sec-heading">3. PROBLEM FORMULATION</h1>
-<p><strong>Need and Significance of Proposed Work:</strong> Modern AI website builders make web development faster, but they have major drawbacks that limit students, independent developers, and small teams. Existing commercial platforms charge high monthly subscriptions, enforce strict limits on AI usage, and lock generated projects inside closed hosting environments without easy self-deployment.</p>
-<p>Specifically, this investigation addresses the following core problems:</p>
-<ul class="bullet-list">
-  <li><strong>Loss of Manual Control (Accidental Code Breakage):</strong> Without direct visual editing tools, users must write repeated AI prompts for tiny styling changes (like moving a button or changing colors). This frequently causes the AI to rewrite the entire file, which introduces new bugs, erases custom logic, and wastes AI tokens.</li>
-  <li><strong>High Browser Memory Consumption:</strong> In-browser runtimes like WebContainers run full Node.js processes directly in the user's browser, leading to high CPU and RAM usage, sluggish performance on standard laptops, and frequent browser tab crashes.</li>
-  <li><strong>Incomplete GitHub Integration:</strong> Existing tools do not provide smooth, two-way GitHub synchronisation. Users cannot easily import their existing GitHub repositories, create branches, edit code, and push updates back to GitHub, nor download clean, standalone ZIP archives [7].</li>
-  <li><strong>Missing Production DevOps Infrastructure:</strong> Commercial platforms provide temporary preview links instead of real-world deployment tools. They lack containerisation with Docker [8], load balancing with Nginx [4], and system performance monitoring with Prometheus and Grafana [5, 6].</li>
-</ul>
-<p><strong>Target Audience and Impact:</strong> Solving these issues helps students, software engineers, and small teams by providing an open, easy-to-use, and production-ready web builder that gives developers complete control over their code and deployment.</p>
 
-<h1 class="sec-heading" style="margin-top: 0.38cm;">4. OBJECTIVES</h1>
-<p class="no-indent">To effectively resolve the formulated problems, the proposed project defines the following five concrete, measurable, and action-verb-led engineering objectives:</p>
-<ol class="obj-list">
-  <li><strong>Design and implement</strong> an AI web synthesis engine using Google Gemini API [2] with fallback templates to generate complete full-stack web applications quickly with 100% uptime.</li>
-  <li><strong>Develop</strong> an interactive dual-mode workspace combining a Monaco code editor, a live sandboxed preview, and an in-place visual DOM inspector [10] that lets users click and style elements without using AI tokens.</li>
-  <li><strong>Integrate</strong> bidirectional GitHub synchronization [7] to import existing repositories, create branches, make commits, and push code directly to GitHub, along with one-click clean ZIP source downloads.</li>
-  <li><strong>Architect and containerise</strong> the full-stack system using Docker and Docker Compose [8], setting up an Nginx reverse proxy with round-robin load balancing and static file caching [4].</li>
-  <li><strong>Implement</strong> an end-to-end monitoring system using Prometheus [5] to collect application metrics (via <code>/metrics</code>) and Grafana [6] dashboards to visualize server response times, request throughput, and container health.</li>
-</ol>
+<h2 class="sub-heading">3.1 Need and Significance of Proposed Work</h2>
+<p>Modern AI-assisted web development tools have gained widespread adoption for rapid prototyping and automated code synthesis. However, an in-depth empirical investigation reveals critical technical and operational barriers that prevent existing platforms (such as Bolt.new, Lovable.dev, and Vercel v0) from functioning as reliable, production-ready engineering environments for students, independent developers, and engineering teams.</p>
+<p>Existing commercial platforms enforce expensive monthly subscription fees, impose restrictive daily token quotas, and lock generated projects within proprietary cloud hosting silos that prohibit direct export, containerisation, or self-hosted deployment. Furthermore, their conversational code generation workflows frequently fail when users attempt small, precision edits.</p>
+
+<h2 class="sub-heading">3.2 Core Engineering Problems Identified</h2>
+<p>Specifically, this investigation formulates and addresses four foundational engineering deficiencies:</p>
+<ul class="bullet-list">
+  <li><strong>Problem 1 — Accidental Code Breakage and Token Waste (The Prompt Trap):</strong> In current conversational tools, modifying a minor visual attribute (such as padding, color, or element alignment) requires submitting a natural language prompt. Remote LLMs routinely rewrite entire component files to satisfy minor requests, frequently introducing syntax errors, erasing working business logic, and consuming costly AI tokens [2, 10].</li>
+  <li><strong>Problem 2 — In-Browser Runtime Memory Exhaustion:</strong> Commercial platforms rely on browser-based WebAssembly runtimes (e.g., WebContainers) to execute Node.js inside client tabs. This approach demands upwards of 2 GB to 4 GB of client RAM per tab, causing browser tab freezing, laptop overheating, and catastrophic crashes on standard consumer hardware.</li>
+  <li><strong>Problem 3 — Incomplete GitHub Synchronization and Repository Portability:</strong> Existing tools provide only partial or one-way code export. They lack bidirectional GitHub integration capable of authenticating developer accounts, cloning remote repositories, maintaining branch histories, and pushing verified commits back to origin, alongside clean ZIP downloads [7].</li>
+  <li><strong>Problem 4 — Absence of Production DevOps and Observability Infrastructure:</strong> Leading platforms terminate at ephemeral preview URLs. They completely omit multi-container Docker packaging [8], Nginx reverse proxy load balancing [4], and real-time observability telemetry (Prometheus and Grafana) [5, 6], leaving developers unable to deploy applications to production infrastructure.</li>
+</ul>
+
+<h2 class="sub-heading">3.3 Target Audience, Scope, and Engineering Significance</h2>
+<p>Resolving these formulated problems through Code2Cloud provides computer science students, open-source developers, and engineering institutions with an accessible, vendor-neutral web engineering platform that unites generative AI speed with absolute developer control and production deployment capabilities.</p>
 </div>
 
-<!-- PAGE 8: 5. METHODOLOGY / PLANNING OF WORK -->
+<!-- PAGE 8: 4. OBJECTIVES (STANDALONE) -->
+<div class="page">
+<h1 class="sec-heading">4. OBJECTIVES</h1>
+<p class="no-indent">To effectively resolve the formulated problems, the proposed project defines the following five concrete, measurable, and action-verb-led engineering objectives:</p>
+
+<div style="margin-top: 0.35cm;">
+  <div style="margin-bottom: 0.4cm;">
+    <p style="margin-bottom: 0.08cm;"><strong>Objective 1: Design and Implement Autonomous AI Code Synthesis Engine</strong></p>
+    <p style="font-size: 10pt; line-height: 1.45; margin-bottom: 0.06cm;">To engineer a multi-file code synthesis engine using the Google Gemini API [2] with Server-Sent Events (SSE) streaming for sub-second code generation. The engine incorporates an intelligent offline template fallback mechanism ensuring 100% website generation uptime even during external API downtime.</p>
+    <p style="font-size: 9.5pt; color: #222; margin-bottom: 0;"><em>Deliverable & Metric:</em> Complete Vite/React project synthesis under 15 seconds; deterministic fallback activation within 500 ms upon API failure.</p>
+  </div>
+
+  <div style="margin-bottom: 0.4cm;">
+    <p style="margin-bottom: 0.08cm;"><strong>Objective 2: Develop Dual-Mode Hybrid Workspace with Visual DOM Inspector</strong></p>
+    <p style="font-size: 10pt; line-height: 1.45; margin-bottom: 0.06cm;">To build an interactive developer workspace pairing a high-performance Monaco code editor with an in-place Visual DOM Inspector [10]. This enables developers to point, click, and visually tweak styles (margins, colors, layout) inside the live preview, synchronizing changes directly to the source code.</p>
+    <p style="font-size: 9.5pt; color: #222; margin-bottom: 0;"><em>Deliverable & Metric:</em> Zero AI token expenditure for visual layout edits; bi-directional state synchronization between Monaco editor and preview iframe in under 50 ms.</p>
+  </div>
+
+  <div style="margin-bottom: 0.4cm;">
+    <p style="margin-bottom: 0.08cm;"><strong>Objective 3: Integrate Bidirectional GitHub Version Control & Portable Export</strong></p>
+    <p style="font-size: 10pt; line-height: 1.45; margin-bottom: 0.06cm;">To incorporate full Git lifecycle automation via GitHub REST APIs [7], allowing users to authenticate via OAuth/PAT, clone existing repositories, create development branches, and push commits directly from the browser, supplemented by clean offline ZIP export.</p>
+    <p style="font-size: 9.5pt; color: #222; margin-bottom: 0;"><em>Deliverable & Metric:</em> One-click bidirectional repository synchronization, branch creation, automated commit generation, and verified zero-dependency standalone ZIP archives.</p>
+  </div>
+
+  <div style="margin-bottom: 0.4cm;">
+    <p style="margin-bottom: 0.08cm;"><strong>Objective 4: Architect Containerised Microservices Stack with Load Balancing</strong></p>
+    <p style="font-size: 10pt; line-height: 1.45; margin-bottom: 0.06cm;">To package client, server, and database components into multi-stage Alpine Docker containers [8] orchestrated by Docker Compose, fronted by an Nginx reverse proxy [4] configured for layer-7 load balancing, SSL termination, and static asset caching.</p>
+    <p style="font-size: 9.5pt; color: #222; margin-bottom: 0;"><em>Deliverable & Metric:</em> Container image footprint under 150 MB; round-robin traffic distribution across replicated backend services with automatic failover.</p>
+  </div>
+
+  <div style="margin-bottom: 0.4cm;">
+    <p style="margin-bottom: 0.08cm;"><strong>Objective 5: Deploy Real-Time Telemetry and Observability Infrastructure</strong></p>
+    <p style="font-size: 10pt; line-height: 1.45; margin-bottom: 0.06cm;">To instrument the application with Prometheus [5] scraping real-time metrics (HTTP request rate, response latency, CPU and memory utilization) via a dedicated <code>/metrics</code> endpoint, visualized on live Grafana [6] operational dashboards.</p>
+    <p style="font-size: 9.5pt; color: #222; margin-bottom: 0;"><em>Deliverable & Metric:</em> Real-time visual monitoring dashboards displaying cluster health, error rates, and request throughput with sub-second scraping intervals.</p>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 9: 5. METHODOLOGY / PLANNING OF WORK -->
 <div class="page">
 <h1 class="sec-heading">5. METHODOLOGY / PLANNING OF WORK</h1>
 <p>The methodology follows a modular, engineering-driven approach divided into structured phases across the project lifecycle.</p>
@@ -703,7 +748,7 @@ ol.references-list li {
 </ul>
 </div>
 
-<!-- PAGE 9: 5.5 DEVOPS & 6. ACTIVITY CHART -->
+<!-- PAGE 10: 5.5 DEVOPS & 6. ACTIVITY CHART -->
 <div class="page">
 <h2 class="sub-heading">5.5 DevOps Infrastructure: Containerisation, Load Balancing & Observability</h2>
 <p style="text-indent: 0;">To meet modern cloud deployment standards, the complete application stack is containerised with Docker [8], load balanced using Nginx [4], and monitored using Prometheus [5] and Grafana [6], as illustrated in Figure 2:</p>
@@ -826,7 +871,7 @@ ol.references-list li {
 </table>
 </div>
 
-<!-- PAGE 10: REFERENCES -->
+<!-- PAGE 11: REFERENCES -->
 <div class="page page-last">
 <h1 class="sec-heading">REFERENCES</h1>
 <ol class="references-list">
