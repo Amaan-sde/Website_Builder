@@ -443,36 +443,30 @@ ol.references-list li {
 </div>
 
 <!-- PAGE 3: 1. INTRODUCTION & 1.1 ARCHITECTURAL PARADIGM -->
-<div class="page">
+<div class="page" style="line-height: 1.38;">
 <h1 class="sec-heading">1. INTRODUCTION</h1>
 <p>Modern software development is changing rapidly with the rise of artificial intelligence. Traditionally, designing and deploying a web application required developers to manually learn many different technologies: frontend component libraries like React [1], styling frameworks like Tailwind CSS [9], backend REST APIs using Node.js and Express [11], databases like MongoDB [12], and cloud server deployment tools [8]. Older website builders like Webflow and Wix made design simpler, but they produced rigid code templates and locked projects inside their own hosting platforms [3].</p>
 <p>Recently, generative AI web tools—such as Bolt.new, Lovable, and Vercel v0—have attempted to generate full-stack web applications directly from simple English prompts. By using Large Language Models (LLMs) like Google Gemini [2], these tools automatically write source code files, install dependencies, and display a live preview of the website.</p>
 <p>However, practical usage reveals serious problems in existing commercial tools. In current platforms, every code change requires writing another text prompt. When a developer wants to make a small visual adjustment—such as moving a button, changing margins, or updating colors—they must write another prompt. The remote AI then regenerates large sections of code, which often introduces new syntax errors, breaks working buttons and state variables, and wastes valuable AI tokens [2, 10]. Code2Cloud directly solves this problem by combining fast AI code generation with an easy visual editor and complete deployment tools.</p>
 
-<h2 class="sub-heading" style="margin-top: 0.3cm; margin-bottom: 0.12cm;">1.1 Architectural Paradigm and Core Innovations of Code2Cloud</h2>
-<p style="text-indent: 0; margin-bottom: 0.14cm;">To give developers both fast AI code generation and complete manual editing control, Code2Cloud is built on a five-tier modular architecture:</p>
-<ul class="bullet-list" style="margin-top: 0.06cm; margin-bottom: 0.14cm;">
-  <li><strong>Client Presentation & Hybrid Workspace:</strong> Built using React 19 [1] and Tailwind CSS [9], featuring a Monaco code editor, a live preview window [10], and an in-place visual inspector to click and style elements directly.</li>
-  <li><strong>Backend API & Streaming Gateway:</strong> An Express.js [11] service that streams AI-generated code directly to the browser using Server-Sent Events (SSE), secured with simple JWT login and request rate limits.</li>
-  <li><strong>AI Engine with Offline Fallbacks:</strong> Combines Google Gemini API [2] with smart offline starter templates to ensure 100% website generation uptime even during external API downtime.</li>
-  <li><strong>Bidirectional GitHub & ZIP Export:</strong> Uses GitHub REST APIs [7] for importing repositories, creating branches, committing changes, and pushing code directly to GitHub, alongside a simple one-click ZIP download.</li>
-  <li><strong>Docker Containers & Monitoring:</strong> Uses lightweight Alpine Docker containers [8], an Nginx layer-7 reverse proxy for load balancing [4], and Prometheus with Grafana for live telemetry and system monitoring [5, 6].</li>
+<h2 class="sub-heading" style="margin-top: 0.24cm; margin-bottom: 0.10cm;">1.1 Architectural Paradigm and Core Innovations of Code2Cloud</h2>
+<p style="text-indent: 0; margin-bottom: 0.12cm;">To give developers both fast AI code generation and complete manual editing control, Code2Cloud is built on a five-tier modular architecture:</p>
+<ul class="bullet-list" style="margin-top: 0.05cm; margin-bottom: 0.12cm; line-height: 1.34;">
+  <li><strong>Client Presentation & Hybrid Workspace:</strong> Built using React 19 [1] and Tailwind CSS [9]. It includes the Monaco code editor with multi-file buffer tabs, an isolated live preview iframe [10], and an in-place visual DOM inspector. Developers can switch seamlessly between raw source code editing and clicking visual elements directly to tweak padding, margins, colors, and layout without making AI calls.</li>
+  <li><strong>Backend API & Streaming Gateway:</strong> An Express.js [11] microservice that connects the client to backend services and external APIs. It streams AI-generated code directly to the browser in real time using Server-Sent Events (SSE), secured with JSON Web Token (JWT) user authentication, CORS policies, and rate-limiting middleware to protect system resources.</li>
+  <li><strong>AI Engine with Offline Fallbacks:</strong> Combines the Google Gemini API [2] with smart offline starter templates. When online, the engine generates complete, working multi-file React/Node.js projects from plain English prompts. If the upstream API faces rate limits or network outages, built-in deterministic templates activate automatically to ensure 100% website generation uptime.</li>
+  <li><strong>Bidirectional GitHub Version Control & ZIP Export:</strong> Built-in Git automation powered by GitHub REST APIs [7]. Developers can log in with GitHub, clone existing repositories, create development branches, commit code, and push updates directly from the browser interface. In addition, an automated client-side exporter allows users to download clean, zero-dependency ZIP archives to run projects anywhere locally.</li>
+  <li><strong>Docker Containers & Monitoring:</strong> Packages all services into lightweight multi-stage Alpine Docker containers [8] orchestrated with Docker Compose. An Nginx layer-7 reverse proxy provides weighted round-robin load balancing and SSL termination [4], while Prometheus and Grafana continuously track server health, request throughput, and latency histograms [5, 6].</li>
 </ul>
-
-<p style="text-indent: 0; margin-top: 0.22cm; margin-bottom: 0.12cm;">As shown in Figure 1, Code2Cloud organizes its features into three simple layers that work together smoothly:</p>
-<ul class="bullet-list" style="margin-top: 0.06cm; margin-bottom: 0;">
-  <li><strong>User Client Layer:</strong> Houses the interactive workspace where developers can write code in Monaco IDE, view live previews, and use the visual inspector to tweak styles without spending any AI tokens [10].</li>
-  <li><strong>API & Orchestration Layer:</strong> An Express.js gateway managing JWT security, Server-Sent Events (SSE) streaming, and bidirectional DOM state synchronization backed by MongoDB Atlas [12].</li>
-  <li><strong>Synthesis & DevOps Layer:</strong> Combines Google Gemini LLM synthesis [2] with smart offline fallback templates, GitHub REST API version control [7], and an Alpine Docker microservice cluster monitored via Prometheus and Grafana [5, 6].</li>
-</ul>
+<p style="text-indent: 0; margin-top: 0.12cm; margin-bottom: 0;">By combining rapid AI generation with granular visual controls and automated cloud deployment, Code2Cloud eliminates the common trade-offs of existing web synthesis platforms. Developers retain full code ownership, zero subscription barriers, and complete operational transparency from initial prompt synthesis to production container deployment.</p>
 </div>
 
 <!-- PAGE 4: FIGURE 1 ARCHITECTURE DIAGRAM (STANDALONE) -->
-<div class="page" style="text-align: center; padding-top: 0.25cm;">
-<h2 class="sub-heading" style="text-align: center; margin-top: 0; margin-bottom: 0.35cm;">Figure 1: High-Level System Architecture and Orchestration Pipeline of Code2Cloud</h2>
+<div class="page" style="padding-top: 0.2cm; line-height: 1.34;">
+<h2 class="sub-heading" style="text-align: center; margin-top: 0; margin-bottom: 0.2cm;">Figure 1: High-Level System Architecture and Orchestration Pipeline of Code2Cloud</h2>
 
-<div style="text-align: center; margin: 0.15cm 0 0.15cm 0;">
-  <svg width="690" height="550" viewBox="0 0 710 560" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff; border:1px solid #ccc; border-radius:4px; max-width: 100%;">
+<div style="text-align: center; margin: 0.1cm 0 0.15cm 0;">
+  <svg width="680" height="420" viewBox="0 0 710 560" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff; border:1px solid #ccc; border-radius:4px; max-width: 100%;">
     <defs>
       <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
         <path d="M 0 1 L 10 5 L 0 9 z" fill="#333" />
@@ -569,8 +563,15 @@ ol.references-list li {
     <text x="595" y="479" font-family="Times New Roman" font-size="10" text-anchor="middle" fill="#475569">Layer-7 Reverse Proxy</text>
     <text x="595" y="498" font-family="Times New Roman" font-size="9" text-anchor="middle" fill="#64748b">Prometheus & Grafana</text>
   </svg>
-  <div class="figure-caption" style="margin-top: 0.25cm;">Figure 1: High-Level System Architecture and Orchestration Pipeline of Code2Cloud</div>
+  <div class="figure-caption" style="margin-top: 0.12cm; margin-bottom: 0.18cm;">Figure 1: High-Level System Architecture and Orchestration Pipeline of Code2Cloud</div>
 </div>
+
+<p style="text-indent: 0; margin-bottom: 0.10cm;">As shown in Figure 1, Code2Cloud organizes its features into three simple layers that work together smoothly:</p>
+<ul class="bullet-list" style="margin-top: 0.04cm; margin-bottom: 0; line-height: 1.32;">
+  <li><strong>User Client Layer:</strong> Houses the interactive workspace where developers can write code in Monaco IDE, view live previews, and use the visual inspector to tweak styles without spending any AI tokens [10].</li>
+  <li><strong>API & Orchestration Layer:</strong> An Express.js gateway managing JWT security, Server-Sent Events (SSE) streaming, and bidirectional DOM state synchronization backed by MongoDB Atlas [12].</li>
+  <li><strong>Synthesis & DevOps Layer:</strong> Combines Google Gemini LLM synthesis [2] with smart offline fallback templates, GitHub REST API version control [7], and an Alpine Docker microservice cluster monitored via Prometheus and Grafana [5, 6].</li>
+</ul>
 </div>
 
 <!-- PAGE 5: 2. LITERATURE SURVEY (THEORETICAL ANALYSIS & GAPS) -->
