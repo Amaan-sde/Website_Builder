@@ -550,30 +550,37 @@ ol.references-list li {
 </ul>
 </div>
 
-<!-- PAGE 5: 2. LITERATURE SURVEY -->
+<!-- PAGE 5: 2. LITERATURE SURVEY (THEORETICAL ANALYSIS & GAPS) -->
 <div class="page">
 <h1 class="sec-heading">2. LITERATURE SURVEY</h1>
-<p>The literature survey reviews the core concepts, modern tools, and practical challenges associated with AI code generation, browser-based execution, and automated web development platforms.</p>
+<p style="margin-bottom: 0.12cm;">The literature survey reviews core paradigms, modern tools, and practical challenges associated with AI code generation, browser-based execution, and automated full-stack web development platforms.</p>
 
-<h2 class="sub-heading">2.1 Large Language Models in Automated Web Generation</h2>
-<p>Modern Large Language Models such as Google Gemini [2] have transformed software development by generating multi-file applications directly from natural language prompts. By training on vast code repositories, these models can synthesize frontend React components [1], backend routes [11], and database schemas [12]. However, conversational AI coding tools frequently introduce subtle defects, deprecated packages, or broken imports. In complex full-stack web applications involving interconnected modules and global states, repeatedly re-generating code via prompts without visual feedback frequently triggers compilation errors and unexpected regressions.</p>
+<h2 class="sub-heading" style="margin-top: 0.14cm; margin-bottom: 0.04cm;">2.1 Large Language Models in Automated Web Generation</h2>
+<p style="margin-bottom: 0.12cm;">Modern Large Language Models such as Google Gemini [2] have transformed software engineering by generating multi-file applications directly from natural language prompts. Trained on vast code repositories, these models synthesize frontend React components [1], backend Express routes [11], and MongoDB schemas [12]. However, conversational AI coding tools frequently introduce subtle defects, deprecated dependencies, or broken imports. In complex applications with shared states, repeatedly re-generating code via prompts without visual feedback frequently triggers syntax errors and unpredictable regressions.</p>
 
-<h2 class="sub-heading">2.2 In-Browser Execution vs. Server Containerisation</h2>
-<p>To run full-stack Node.js applications directly inside the web browser without external servers, commercial tools like Bolt.new use WebAssembly (Wasm) runtimes called WebContainers. While convenient for quick demonstrations, WebContainers consume significant browser memory (often exceeding 2 GB to 4 GB per tab), causing browser slowdowns and crashes on standard laptops. Furthermore, they cannot execute native Linux binaries. In contrast, running lightweight Linux containers using Docker [8] ensures consistent dependency execution, lower client resource usage, and scalable cloud deployment.</p>
+<h2 class="sub-heading" style="margin-top: 0.14cm; margin-bottom: 0.04cm;">2.2 In-Browser Execution vs. Server Containerisation</h2>
+<p style="margin-bottom: 0.12cm;">To run full-stack Node.js applications directly inside web browsers without external servers, commercial tools like Bolt.new employ WebAssembly (Wasm) runtimes called WebContainers. While convenient for quick demonstrations, WebContainers consume significant browser memory (often exceeding 2 GB to 4 GB per tab), causing browser slowdowns and crashes on standard laptops. Furthermore, they cannot execute native Linux binaries. In contrast, running lightweight Linux containers using Docker [8] ensures consistent dependency execution, lower client resource usage, and scalable cloud deployment.</p>
 
-<h2 class="sub-heading">2.3 Review of Contemporary AI Web Builders</h2>
-<p>A systematic technical evaluation of leading commercial platforms identifies distinct architectural models and operational constraints:</p>
-<ul class="bullet-list">
-  <li><strong>Bolt.new (StackBlitz):</strong> Executes full-stack Node.js environments inside client browsers using WebContainers. However, it suffers from severe browser slowdowns on standard laptops, enforces strict subscription paywalls when tokens run out, and lacks tools for external containerised deployment [8].</li>
-  <li><strong>Lovable.dev:</strong> Generates clean React/Vite web applications [1, 3] through conversational prompts. However, it lacks a visual editor for manual tweaks. Changing a simple element layout requires writing an AI prompt, which frequently rewrites other parts of the code and introduces bugs.</li>
-  <li><strong>Vercel v0:</strong> Specializes in creating isolated UI components with Tailwind CSS [9]. However, it lacks full-stack backend persistence [12] and two-way GitHub repository synchronization [7].</li>
+<h2 class="sub-heading" style="margin-top: 0.14cm; margin-bottom: 0.04cm;">2.3 Review of Contemporary AI Web Builders</h2>
+<p style="margin-bottom: 0.08cm;">A technical evaluation of leading commercial platforms identifies distinct architectural models and operational constraints:</p>
+<ul class="bullet-list" style="margin-top: 0.04cm; margin-bottom: 0.12cm;">
+  <li><strong>Bolt.new (StackBlitz):</strong> Executes full-stack environments via browser WebContainers, causing severe client memory bloat, high subscription paywalls, and lacking external Docker deployment [8].</li>
+  <li><strong>Lovable.dev:</strong> Generates clean React/Vite applications [1, 3] through prompts, but lacks an in-place visual editor. Minor visual edits require prompt re-generation, often breaking working logic.</li>
+  <li><strong>Vercel v0:</strong> Focuses on isolated Tailwind CSS components [9], but lacks full-stack backend persistence [12] and two-way GitHub repository synchronization [7].</li>
 </ul>
+
+<h2 class="sub-heading" style="margin-top: 0.14cm; margin-bottom: 0.04cm;">2.4 Identification of Critical Gaps in Existing Literature</h2>
+<p style="margin-bottom: 0.08cm;">The technical evaluation of existing platforms exposes two decisive engineering gaps:</p>
+<p style="margin-bottom: 0.1cm;"><strong>Gap 1: Accidental Code Breakage During Minor Edits (The Prompt Trap).</strong> While AI models excel at generating initial codebases, natural language is imprecise for minor visual tweaks. When adjusting margins, padding, or colors, LLMs routinely rewrite entire files, corrupting React state, erasing logic, and consuming costly tokens [2, 10]. Current tools lack an in-place visual DOM inspector for direct, zero-token UI adjustments.</p>
+<p style="margin-bottom: 0;"><strong>Gap 2: Missing Production DevOps and Deployment Infrastructure.</strong> Commercial AI platforms terminate at temporary preview URLs. Real-world deployment requires production-ready Docker containers [8], reverse proxying with load balancing [4], and live monitoring metrics [5, 6]. Existing builders omit these capabilities to enforce vendor lock-in to proprietary hosting.</p>
 </div>
 
-<!-- PAGE 6: TABLE 1 & 2.4 GAPS -->
+<!-- PAGE 6: COMPARATIVE EVALUATION MATRIX & SYNTHESIS -->
 <div class="page">
-<div class="table-caption">Table 1: Comparative Evaluation of Leading AI Web Synthesis Platforms vs Code2Cloud</div>
-<table class="data-table">
+<h2 class="sub-heading" style="text-align: center; margin-top: 0; margin-bottom: 0.25cm;">Table 1: Comparative Evaluation of Leading AI Web Synthesis Platforms vs Code2Cloud</h2>
+
+<div class="table-caption" style="margin-bottom: 0.1cm;">System Architecture, Operational Capabilities, and DevOps Readiness Comparison</div>
+<table class="data-table" style="margin-bottom: 0.32cm;">
   <thead>
     <tr>
       <th style="width: 22%;">Metric / Capability</th>
@@ -650,10 +657,15 @@ ol.references-list li {
   </tbody>
 </table>
 
-<h2 class="sub-heading">2.4 Identification of Critical Gaps in Existing Literature</h2>
-<p>The technical evaluation of existing platforms exposes two major engineering gaps:</p>
-<p><strong>Gap 1: Accidental Code Breakage During Minor Edits (The Prompt Trap).</strong> While AI models excel at generating new projects from scratch, natural language is imprecise for tiny visual edits. When a user asks the AI to adjust padding, font size, or a button's location, the AI often rewrites the entire file. This frequently breaks existing React state, erases previously working functions, and consumes unnecessary AI tokens. Current platforms lack an in-place visual tool to click and modify elements directly in the code without sending repeated AI prompts [10].</p>
-<p><strong>Gap 2: Missing Production DevOps and Deployment Infrastructure.</strong> Commercial AI builders stop at temporary browser previews. However, real-world deployment requires production-ready Docker containers [8], reverse proxying with load balancing [4], and server monitoring with metrics [5, 6]. Existing platforms deliberately omit these deployment tools to force users into expensive proprietary hosting plans.</p>
+<h2 class="sub-heading" style="margin-top: 0.35cm;">2.5 Synthesis of Comparative Findings and Architectural Implications</h2>
+<p style="text-indent: 0; margin-bottom: 0.16cm;">The multi-dimensional benchmark presented in Table 1 yields four critical architectural takeaways that directly inform the design of Code2Cloud:</p>
+
+<ul class="bullet-list">
+  <li><strong>Decoupling Code Synthesis from Precision Visual Tuning:</strong> While existing platforms treat all edits as expensive conversational tasks, Code2Cloud introduces an in-place visual DOM inspector. This allows direct style modifications inside the live preview with zero AI tokens and zero risk of code corruption [10].</li>
+  <li><strong>Client Resource Conservation via Native Containerisation:</strong> Replacing memory-intensive in-browser WebContainers with lightweight multi-stage Alpine Docker containers [8] lowers client RAM consumption from over 2 GB down to typical browser levels (~180 MB), eliminating browser freezing.</li>
+  <li><strong>Elimination of Proprietary Vendor Lock-In:</strong> By supplying bidirectional GitHub repository synchronization [7] and standalone clean ZIP exports, Code2Cloud ensures complete code portability, enabling developers to run and deploy projects on any infrastructure.</li>
+  <li><strong>Enterprise-Grade DevOps and Production Observability:</strong> Code2Cloud provides an end-to-end deployment pipeline with Nginx load balancing [4] and Prometheus/Grafana monitoring [5, 6], delivering a true production-grade platform absent in commercial alternatives.</li>
+</ul>
 </div>
 
 <!-- PAGE 7: 3. PROBLEM FORMULATION (STANDALONE) -->
