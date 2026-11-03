@@ -17,7 +17,7 @@
 body {
   font-family: 'Times New Roman', Times, serif;
   font-size: 11pt;
-  line-height: 1.38;
+  line-height: 1.42;
   color: #000;
   margin: 0;
   padding: 0;
@@ -26,15 +26,39 @@ body {
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
-.page {
-  page-break-after: always;
-  break-after: page;
-  box-sizing: border-box;
-  width: 100%;
+
+/* Clean Page Breaks for Print and Screen */
+@media screen {
+  body {
+    background-color: #f1f5f9;
+    padding: 20px 0;
+  }
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 20px auto;
+    background: #ffffff;
+    padding: 22mm 12.5mm 15mm 25mm;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+    border-radius: 3px;
+    overflow: hidden;
+  }
 }
-.page-last {
-  page-break-after: auto;
-  break-after: auto;
+@media print {
+  body {
+    background: #ffffff;
+  }
+  .page {
+    page-break-after: always;
+    break-after: page;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 25.5cm;
+  }
+  .page-last {
+    page-break-after: auto;
+    break-after: auto;
+  }
 }
 
 /* Typography */
@@ -66,27 +90,28 @@ p.no-indent {
 }
 
 /* ========================================================
-   TITLE PAGE (PERFECT BALANCED SPACING ACROSS WHOLE A4)
+   TITLE PAGE (PERFECT ALIGNMENT & CONTINUOUS BALANCED SPACING)
    ======================================================== */
 .title-page {
   text-align: center;
-  padding-top: 0.1cm;
+  padding-top: 0.15cm;
+  width: 100%;
 }
 .title-main {
   font-size: 15pt;
   font-weight: bold;
   text-align: center;
   text-transform: uppercase;
-  line-height: 1.35;
-  margin-bottom: 0.5cm;
+  line-height: 1.5;
+  margin-bottom: 0.65cm;
   letter-spacing: 0.4px;
 }
 .synopsis-head {
-  font-size: 13pt;
+  font-size: 13.5pt;
   font-weight: bold;
   text-align: center;
   text-transform: uppercase;
-  margin-bottom: 0.12cm;
+  margin-bottom: 0.15cm;
   letter-spacing: 0.5px;
 }
 .mini-proj {
@@ -94,56 +119,56 @@ p.no-indent {
   font-weight: normal;
   text-align: center;
   text-transform: uppercase;
-  margin-bottom: 0.4cm;
+  margin-bottom: 0.55cm;
   letter-spacing: 0.5px;
 }
 .partial-fulfill {
-  font-size: 10pt;
+  font-size: 10.5pt;
   font-style: italic;
   text-align: center;
-  line-height: 1.4;
-  margin-bottom: 0.35cm;
+  line-height: 1.5;
+  margin-bottom: 0.5cm;
 }
 .degree {
-  font-size: 13.5pt;
+  font-size: 14pt;
   font-weight: bold;
   text-align: center;
   text-transform: uppercase;
-  margin-bottom: 0.12cm;
+  margin-bottom: 0.15cm;
   letter-spacing: 0.5px;
 }
 .branch {
   font-size: 12pt;
   text-align: center;
-  line-height: 1.4;
-  margin-bottom: 0.55cm;
+  line-height: 1.5;
+  margin-bottom: 0.75cm;
 }
 .sub-by-lbl {
   font-size: 11pt;
   font-weight: bold;
   text-align: center;
   text-transform: uppercase;
-  margin-bottom: 0.22cm;
+  margin-bottom: 0.25cm;
   letter-spacing: 0.5px;
 }
 .student-names-row {
   font-size: 11pt;
   font-weight: bold;
   text-align: center;
-  line-height: 1.55;
-  margin-bottom: 0.22cm;
+  line-height: 1.7;
+  margin-bottom: 0.25cm;
 }
 .sub-date {
-  font-size: 10.5pt;
+  font-size: 11pt;
   text-align: center;
-  margin-bottom: 0.5cm;
+  margin-bottom: 0.55cm;
 }
 .logo-container {
   text-align: center;
-  margin-bottom: 0.45cm;
+  margin-bottom: 0.35cm;
 }
 .logo-container img {
-  width: 76px;
+  width: 74px;
   height: auto;
   display: inline-block;
 }
@@ -152,17 +177,19 @@ p.no-indent {
   font-weight: bold;
   text-align: center;
   text-transform: uppercase;
-  margin-bottom: 0.1cm;
+  margin-bottom: 0.12cm;
   letter-spacing: 0.3px;
 }
 .inst-address {
   font-size: 10pt;
   text-align: center;
+  line-height: 1.4;
   margin-bottom: 0.08cm;
 }
 .inst-affil {
-  font-size: 9pt;
+  font-size: 9.5pt;
   text-align: center;
+  line-height: 1.4;
   margin-bottom: 0.12cm;
   font-style: italic;
 }
@@ -171,7 +198,7 @@ p.no-indent {
   font-weight: bold;
   text-align: center;
   text-transform: uppercase;
-  margin-bottom: 0.65cm;
+  margin-bottom: 0.85cm;
   letter-spacing: 0.5px;
 }
 
@@ -186,24 +213,26 @@ p.no-indent {
   vertical-align: top;
   text-align: left;
   font-size: 9.5pt;
-  line-height: 1.35;
-  padding-right: 0.3cm;
+  line-height: 1.4;
+  padding-right: 0.4cm;
 }
 .sig-right {
   width: 52%;
   vertical-align: top;
   text-align: left;
   font-size: 9.5pt;
-  line-height: 1.35;
-  padding-left: 0.4cm;
+  line-height: 1.4;
+  padding-left: 0.3cm;
 }
 .sig-title {
   font-weight: bold;
   font-size: 10pt;
-  margin-bottom: 0.5cm;
+  margin-bottom: 0.9cm;
 }
 .sig-line {
-  margin-bottom: 0.1cm;
+  border-bottom: 1px solid #000;
+  width: 82%;
+  margin-bottom: 0.18cm;
 }
 .sig-name {
   font-weight: bold;
@@ -215,27 +244,14 @@ p.no-indent {
 .sig-dept, .sig-inst {
   color: #111;
 }
-.sig-members {
-  margin-top: 0.08cm;
+.members-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9.5pt;
+  line-height: 1.6;
 }
-.sig-member {
-  margin-bottom: 0.08cm;
-  display: flex;
-  align-items: baseline;
-}
-.m-num {
-  width: 0.45cm;
-  font-weight: bold;
-  flex-shrink: 0;
-}
-.m-name {
-  font-weight: bold;
-  flex-grow: 1;
-}
-.m-roll {
-  font-weight: normal;
-  color: #222;
-  margin-left: 0.15cm;
+.members-table td {
+  padding: 1.5px 0;
 }
 
 /* ========================================================
@@ -366,8 +382,8 @@ ol.references-list li {
   
   <div class="sub-by-lbl">SUBMITTED BY:</div>
   <div class="student-names-row">
-    Lakshita Pandey (Team Leader) &nbsp;|&nbsp; Amaan Khan &nbsp;|&nbsp; Anushka Joshi<br>
-    Harshit Dumka &nbsp;|&nbsp; Bhumika Padiyar
+    Lakshita Pandey (Team Leader) &nbsp;&bull;&nbsp; Amaan Khan &nbsp;&bull;&nbsp; Anushka Joshi<br>
+    Harshit Dumka &nbsp;&bull;&nbsp; Bhumika Padiyar
   </div>
   <div class="sub-date">[November, 2026]</div>
   
@@ -382,21 +398,41 @@ ol.references-list li {
     <tr>
       <td class="sig-left">
         <div class="sig-title">Submitted To:</div>
-        <div class="sig-line">___________________________</div>
+        <div class="sig-line"></div>
         <div class="sig-name">Mr. Hem Bhatt</div>
         <div class="sig-role">Assistant Professor & Project Guide</div>
         <div class="sig-dept">Department of Computer Science & Engineering</div>
         <div class="sig-inst">Birla Institute of Applied Sciences, Bhimtal</div>
       </td>
       <td class="sig-right">
-        <div class="sig-title">Submitted By (B.Tech CSE VII Sem):</div>
-        <div class="sig-members">
-          <div class="sig-member"><span class="m-num">1.</span><span class="m-name">Lakshita Pandey (Leader)</span><span class="m-roll">- 230050101095</span></div>
-          <div class="sig-member"><span class="m-num">2.</span><span class="m-name">Amaan Khan</span><span class="m-roll">- 230050101015</span></div>
-          <div class="sig-member"><span class="m-num">3.</span><span class="m-name">Anushka Joshi</span><span class="m-roll">- 230050101018</span></div>
-          <div class="sig-member"><span class="m-num">4.</span><span class="m-name">Harshit Dumka</span><span class="m-roll">- 230050101061</span></div>
-          <div class="sig-member"><span class="m-num">5.</span><span class="m-name">Bhumika Padiyar</span><span class="m-roll">- 230050101038</span></div>
-        </div>
+        <div class="sig-title" style="margin-bottom: 0.35cm;">Submitted By (B.Tech CSE VII Sem):</div>
+        <table class="members-table">
+          <tr>
+            <td style="width: 20px; font-weight: bold; vertical-align: top;">1.</td>
+            <td style="font-weight: bold; white-space: nowrap;">Lakshita Pandey <span style="font-weight: normal; font-style: italic;">(Leader)</span></td>
+            <td style="padding-left: 12px; font-weight: normal; font-family: 'Times New Roman', Times, serif; font-size: 9.5pt; white-space: nowrap;">- 230050101095</td>
+          </tr>
+          <tr>
+            <td style="font-weight: bold; vertical-align: top;">2.</td>
+            <td style="font-weight: bold; white-space: nowrap;">Amaan Khan</td>
+            <td style="padding-left: 12px; font-weight: normal; font-family: 'Times New Roman', Times, serif; font-size: 9.5pt; white-space: nowrap;">- 230050101015</td>
+          </tr>
+          <tr>
+            <td style="font-weight: bold; vertical-align: top;">3.</td>
+            <td style="font-weight: bold; white-space: nowrap;">Anushka Joshi</td>
+            <td style="padding-left: 12px; font-weight: normal; font-family: 'Times New Roman', Times, serif; font-size: 9.5pt; white-space: nowrap;">- 230050101018</td>
+          </tr>
+          <tr>
+            <td style="font-weight: bold; vertical-align: top;">4.</td>
+            <td style="font-weight: bold; white-space: nowrap;">Harshit Dumka</td>
+            <td style="padding-left: 12px; font-weight: normal; font-family: 'Times New Roman', Times, serif; font-size: 9.5pt; white-space: nowrap;">- 230050101061</td>
+          </tr>
+          <tr>
+            <td style="font-weight: bold; vertical-align: top;">5.</td>
+            <td style="font-weight: bold; white-space: nowrap;">Bhumika Padiyar</td>
+            <td style="padding-left: 12px; font-weight: normal; font-family: 'Times New Roman', Times, serif; font-size: 9.5pt; white-space: nowrap;">- 230050101038</td>
+          </tr>
+        </table>
       </td>
     </tr>
   </table>
@@ -502,7 +538,7 @@ ol.references-list li {
     <text x="592" y="242" font-family="Times New Roman" font-size="8.5" text-anchor="middle" fill="#475569">Minimal Alpine Footprint</text>
     <rect x="515" y="265" width="155" height="55" rx="3" fill="#ffffff" stroke="#94a3b8" />
     <text x="592" y="288" font-family="Times New Roman" font-size="10.5" font-weight="bold" text-anchor="middle">Nginx & Monitoring</text>
-    <text x="592" y="304" font-family="Times New Roman" font-size="9" text-anchor="middle" fill="#475569">Load Balancer / Grafana</text>
+    <text x="592" y="304" font-family="Times New Roman" font-size="9.5" text-anchor="middle" fill="#475569">Load Balancer / Grafana</text>
   </svg>
   <div class="figure-caption">Figure 1: High-Level System Architecture and Orchestration Pipeline of Code2Cloud</div>
 </div>
